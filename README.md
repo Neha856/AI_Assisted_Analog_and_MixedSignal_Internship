@@ -121,7 +121,7 @@ ls /vsd_projects/vsdmixedsignalflow/openlane/runs/*/results/final/gds
 klayout ~/vsd_projects/vsdmixedsignalflow/openlane/runs/<timestamp>/results/final/gds/design_mux.gds &
 ```
 
-IEEE 1-page two column report can be found [here](docs/Installation_Guide.pdf).
+IEEE 1-page two column report can be found [here](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/main/docs/Week1_AI_Assisted_Mixed_Signal_Physical_Design_Flow.pdf).
 
 
 
