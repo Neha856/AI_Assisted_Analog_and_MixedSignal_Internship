@@ -43,7 +43,7 @@ The  repository can be found [here](https://github.com/The-OpenROAD-Project).
 
 OpenROAD is an open-source Electronic Design Automation (EDA) tool that automates the digital physical design process. It performs synthesis, floorplanning, placement, clock tree synthesis, routing, timing analysis, and design verification. OpenROAD aims to provide a fully autonomous RTL-to-GDSII implementation flow for ASIC design using open-source technologies.
 
-Detailed installation steps can be found [here](docs/Installation_Guide.pdf).
+Detailed installation steps can be found [here](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/ea7c85247df4d6d6fd80db4feb298a1a0e381494/docs/Steps%20to%20install%20OpenROAD%20tools-1.pdf).
 
 
 ### Clonning the repository as AI suggested 
