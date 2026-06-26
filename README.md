@@ -29,6 +29,8 @@ An **Analog and Mixed-Signal System-on-Chip (SoC)** integrates both analog and d
 ### What is RTL2GDS flow of mixed signal SoC
 
 The RTL-to-GDSII flow converts a digital RTL design into a manufacturable chip layout while integrating pre-designed analog macros. The process includes synthesis, floorplanning, placement, clock tree synthesis, routing, timing verification, and GDSII generation. Analog IPs are incorporated using LEF, LIB, and Verilog abstract views to enable seamless digital implementation.
+![image alt](https://github.com/Neha856/SoC_Design/blob/e103318e668825ed5329ff25b3f162d11c2ff586/Screenshot%202026-05-16%20123414.png)
+
 
 ## Part 2 : OpenROAD Tool Installation 
 ### What is OpenROAD Project
@@ -42,225 +44,85 @@ The  repository can be found [here](https://github.com/The-OpenROAD-Project).
 OpenROAD is an open-source Electronic Design Automation (EDA) tool that automates the digital physical design process. It performs synthesis, floorplanning, placement, clock tree synthesis, routing, timing analysis, and design verification. OpenROAD aims to provide a fully autonomous RTL-to-GDSII implementation flow for ASIC design using open-source technologies.
 
 Detailed installation steps can be found [here](docs/Installation_Guide.pdf).
+
+
+### Clonning the repository as AI suggested 
+
+```bash
+# making folder where i want to clone
+mkdir vsd_projects
+# clonning the reference repo
+git clone https://github.com/praharshapm/vsdmixedsignalflow.git
+# View the Directory Structure
+tree -L 2
+```
+Directory Structure i get (excluding the `images` folder)
+
+```text
+vsdmixedsignalflow/
+├── IP Layout/
+│   ├── 21muxlayout.mag
+│   ├── AMUX2_3V.mag
+│   └── AMUX2_3V_test.mag
+├── LEF/
+│   ├── AMUX2_3V.lef
+│   └── txt
+├── LIB/
+│   ├── AMUX2_3V.lib
+│   └── sky130_fd_sc_hd__tt_025C_1v80.lib
+├── openlane/
+│   ├── config.tcl
+│   ├── LEF/
+│   ├── results/
+│   ├── runs/
+│   ├── script.tcl
+│   └── verilog/
+├── Verilog/
+│   ├── AMUX2_3V.v
+│   ├── design_mux.v
+│   ├── raven_spi.v
+│   └── spi_slave.v
+├── _config.yml
+├── LICENSE
+├── README.md
+├── sky130A.tech
+├── Steps to install OpenROAD tools.pdf
+└── verilog_to_lib.pl
+```
+
+**Error** i have find during use of openlane and docker is 
+    - The repo `vsdmixedsignalflow` is not a full PDK installation.
+	- It only has the tech file (sky130A.tech), plus some libraries (LIB, LEF) and design configs.
+    - OpenLane’s flow expects a complete Sky130A PDK tree (with libs.ref, libs.tech, etc.), not just a .tech file.
+**Rectify** i have installed the full Sky130A PDK and then running mux design.
+```bash
+# Go to /openlane ,This is where we’ll keep the open_pdks source.
+cd /openlane
+# Clone the open_pdks
+git clone https://github.com/RTimothyEdwards/open_pdks.git
+cd open_pdks
+# Configure for Sky130A
+./configure --enable-sky130-pdk
+# Build the PDK
+make
+# Install the PDK
+make install
+# Now go to your repo root
+cd /vsd_projects/vsdmixedsignalflow
+# Set variables
+export PDK_ROOT=/usr/local/share/pdk
+export PDK=sky130A
+export PDK_VARIANT=sky130_fd_sc_hd
+# Switch back to the OpenLane tool directory
+cd /openlane
+flow.tcl -design /vsd_projects/vsdmixedsignalflow/openlane
+# Inside container
+ls /vsd_projects/vsdmixedsignalflow/openlane/runs/*/results/final/gds
+klayout ~/vsd_projects/vsdmixedsignalflow/openlane/runs/<timestamp>/results/final/gds/design_mux.gds &
+```
+
 IEEE 1-page two column report can be found [here](docs/Installation_Guide.pdf).
 
-## What is a RISC-V Instruction Set?
-
-instruction set architecture (ISA) is the collection of commands a processor can execute.These instructions tell the CPU what operation to perform.
-
-Examples of RISC-V instructions:
-
-```text
-ADD   -> addition
-SUB   -> subtraction
-LW    -> load word from memory
-SW    -> store word to memory
-BEQ   -> branch if equal
-JAL   -> jump and link
-```
-
-### Common RISC-V Base Architectures
-
-* **RV32I** → 32-bit integer base ISA
-* **RV64I** → 64-bit integer base ISA
-* **RV32/64IM** → includes multiplication/division
-* **RV32/64IMAFD** → floating-point support.
-
-## Lec3 : From software Application to hardware
-### What inside between user and hardware
-
-- **Application Software Layer** : Application software is used directly by the user to perform tasks. like browser, Word, PDF reader, Excel, Virtual box etc. Applications are written in high-level languages like C, C++, Java.
- **Input** : User commands/actions
- **Output** : High-level program written in: C, C++,Java, Python.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/a6132d1a286d71da2ac6ca3e92bd1f7ab6f378a4/Screenshot%202026-05-15%20092410.png)
-
-- **System Software Layer** : This has Operating system, compiler and Assembler.
-  - **Operating System** : The Operating System (Windows/Linux) manages files, IO devices, Memory allocation, Process scheduling and Device control. The output                              of OS is Provides APIs(Application programming interface)/system calls to applications.
-  - **Compiler Stage**   : Compiler converts high-level language into assembly related instructions. example RISCV ISA, x86 ISA etc. This ISA is important                                   because Software does NOT directly know transistor-level hardware. It only knows ISA instructions like: ADD, SUB,LOAD, STORE, JUMP etc.
-  - **Assembler Stage**  : Assembler converts assembly instructions into binary machine code(.bin). Example: ADD R1,R2 becomes: 101100101001.
-
-- **Hardware** : Hardware/processor executes this binary code physically using logic gates and transistors. It contains: ALU,Registers,Memory, Control Unit, Interconnects,Transistors. HDL languages like Verilog and VHDL are used separately by hardware engineers to design the processor hardware itself.The output of hardware is Actual physical operations like Arithmetic,Memory access,Signal generation,Display/output control etc.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/a6132d1a286d71da2ac6ca3e92bd1f7ab6f378a4/Screenshot%202026-05-15%20092946.png)
-
-# Section 2 - SoC Design and OpenLANE
-## Lec1 : Introduction of all components of open source digital ASIC Design
-### Opensource Digital ASIC Design 
-
-ASIC is a custom chip designed for a specific application or function. They needed three things:
-- **1.RTL Designs** : RTL means **Register Transfer Level** design. This is the hardware functionality written using HDL languages like: Verilog, VHDL,  SystemVerilog.RTL describes logic, registers, FSM, datapath, processor blocks etc. The ouput is RTL code (.v, .sv).
-
-- **2.EDA Tools** : EDA means **Electronics Design Automation**. These are software tools used to convert RTL into actual chip layout. Examples are OpenROAD, OpenLANE, Qflow. Commercial EDA tools: Cadence Design Systems, Synopsys, Siemens (Mentor Graphics) etc.  EDA tools perform: Synthesis, Floorplanning, Placement, Clock Tree Synthesis, Routing,Timing analysis, DRC/LVS verification etc.The ouput of EDA tools is  physical layout (GDSII).
-
-- **3.PDK Data** : PDK means **Process Design Kit**.This is the technology information provided by the foundry. It contains: transistor models, design rules, standard cells, SPICE models, layer information, DRC/LVS rules. Without PDK tools do not know fabrication rules and chip cannot be manufactured correctly. PDK is the bridge between design and fabrication technology.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/3c8612f982bb6a2e0474979b7e1825f27431f6b7/Screenshot%202026-05-15%20094629.png)
-
-#### Why Open Source?
-Earlier ASIC design was expensive because of commercial EDA tools cost huge money and foundry PDKs were closed/private. Open-source movement provides:
- free RTL cores, free EDA tools and open PDKs.This helps students, researchers, startups learning ASIC design.
- Examples: OpenROAD, OpenLANE, SkyWater PDK, RISC-V cores.
-
-#### What is 130nm? Is 130nm still used? Is 130nm fast?
-
-- 130nm is a semiconductor technology node. It roughly represents transistor size. 
-- Yes, still used in many areas because cheaper manufacturing, easier fabrication, reliable good for analog/mixed-signal suitable for education and research. Used in microcontrollers, sensors, automotive, power ICs academic ASIC projects.But for AI processors, mobile CPUs, high-performance chips advanced nodes like: 7nm, 5nm, 3nm are used.
-- It is fast but not very fast compare to modern nodes but simpler, more suitable and easier to design and good for learning ASIC Flow.
-
-
-#### ASIC Design Flow
-
-```text
-Specification
-    ↓
-RTL Design (Verilog/VHDL)
-    ↓
-Functional Verification
-    ↓
-Synthesis
-    ↓
-Gate-Level Netlist
-    ↓
-Floorplanning
-    ↓
-Placement
-    ↓
-Clock Tree Synthesis
-    ↓
-Routing
-    ↓
-DRC/LVS Checks
-    ↓
-GDSII Layout
-    ↓
-Fabrication at Foundry
-    ↓
-Packaged Chip
-```
-
-## Lec2 : Simplified RTL2GDS Flow
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/e103318e668825ed5329ff25b3f162d11c2ff586/Screenshot%202026-05-16%20123414.png)
-
-### Synthesis (Synth)
-
-* Synthesis converts RTL code into a gate-level netlist using logic gates like AND, OR, flip-flops, and multiplexers.
-* The synthesis tool optimizes the design for area, timing, and power based on constraints.
-* It maps the RTL logic to standard cells available in the PDK library.
-* After synthesis, the design becomes hardware-realistic instead of behavioral code.
-* Output of synthesis is a gate-level netlist.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/47163e27ed3a6e8061f74ce175d52cdababe1fd8/Screenshot%202026-05-16%20123640.png)
-
-### FP + PP (Floorplanning + Power Planning)
-
-* Floorplanning decides the physical arrangement of macros, memories, IO pins, and standard-cell regions inside the chip.
-* Power planning creates power and ground networks to supply stable voltage across the design.
-* This stage determines chip size, utilization, routing space, and overall layout structure.
-* Good floorplanning improves timing, congestion, and power distribution.
-* It is one of the most important stages in physical design.
-
-### Placement
-
-* Placement positions all standard cells into legal locations inside the floorplan.
-* The tool tries to minimize wirelength, timing delay, and congestion.
-* Cells are arranged close to related logic blocks for better performance.
-* Only component locations are decided here; connections are not completed yet.
-* Proper placement helps achieve timing closure and easier routing.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/f6bcf7d82cefb4e8569307c279bd6d96f3613e2f/Screenshot%202026-05-16%20123842.png)
-
-### CTS (Clock Tree Synthesis)
-
-* CTS builds the clock distribution network inside the chip.
-* Buffers and clock cells are inserted so the clock reaches all flip-flops with minimum skew and delay.
-* The goal is to distribute the clock evenly across the design.
-* Poor clock distribution can cause setup and hold timing violations.
-* CTS is critical because almost all sequential circuits depend on the clock signal.
-
-### Routing
-
-* Routing creates the physical metal connections between all placed cells and blocks.
-* The router uses different metal layers defined in the PDK to connect signals, clock, power, and ground.
-* It ensures there are no shorts, opens, or rule violations.
-* After routing, the chip layout becomes physically complete.
-* This stage produces the detailed interconnection structure of the ASIC.
-
-### Sign Off
-
-* Sign-off is the final verification stage before chip fabrication.
-* Engineers check timing, power, DRC, LVS, signal integrity, and manufacturability.
-* The design must satisfy all foundry and functional requirements.
-* If errors are found, the design goes back for fixes.
-* After successful sign-off, the final GDSII file is generated for fabrication.
-
-### GDSII
-
-* GDSII is the final layout file sent to the foundry for manufacturing.
-* It contains all geometric information of transistors, metal layers, vias, and routing.
-* This file represents the complete physical chip layout.
-* Foundries use GDSII data to create masks for semiconductor fabrication.
-* It is the final output of the ASIC physical design flow.
-
-## Lec3 : Introduction of OpenLANE and Strive chipsets
-### OpenLANE 
-
-OpenLANE is an open-source automated ASIC physical design flow. It connects multiple EDA tools together to convert RTL code into a GDSII chip layout automatically. It performs stages like:Synthesis, Placement, CTS, Routing, Signoff. It is mainly used with the SkyWater 130nm open-source PDK.
-
-
-### StriVe
-
-It is a reference/open-source SoC platform used for learning and prototyping ASICs. In simple word StriVe is a ready-made chip platform/template where designers can plug in their own hardware design. StriVe provides processor subsystem, memory interface, GPIO, integration framework, So users can directly add their own RTL block into a working chip environment.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/834162d834e5814948947cdbc10b7020e196dcb5/Screenshot%202026-05-16%20150339.png)
-
-
-#### Simple Difference
-
-```text
-| OpenLANE                   | StriVe                        |
-| -------------------------- | ----------------------------- |
-| ASIC design flow/tool      | Ready-made SoC platform       |
-| Converts RTL to layout     | Provides chip framework       |
-| Physical design automation | Hardware integration template |
-| Used during implementation | Used during SoC development   |
-```
-
-
-## Lec4 : Introduction of OpenLANE detailed ASIC design flow
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/834162d834e5814948947cdbc10b7020e196dcb5/Screenshot%202026-05-16%20150620.png)
-
-
-- **Synthesis Exploration** : Synthesis exploration tries different synthesis settings to improve timing, area, and power. It helps find the best optimized gate-level implementation from RTL. Tools mainly adjust mapping, constraints, and optimization strategies.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/e96a1e62ed8cb6f78e06a457e56afef60265a513/Screenshot%202026-05-16%20152829.png)
-
-
-- **Design Exploration** : Design exploration checks different floorplans, utilization, placement, and routing possibilities.It helps identify the best chip architecture and physical implementation setup.The goal is to improve performance, congestion, timing, and chip area.
-
-
-- **OpenLANE Regression Testing** : Regression testing verifies that OpenLANE flow works correctly after tool or script updates. Many test designs are run automatically to check whether outputs still meet expected results. It ensures flow stability and avoids introducing new errors.
-
-- **DFT (Design for Testability)** : DFT adds extra test structures into the design to make chip testing easier after fabrication. Common techniques are scan chains, scan flip-flops, and BIST. It helps detect manufacturing defects and improves test coverage.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/e96a1e62ed8cb6f78e06a457e56afef60265a513/xmyCD0IjNOtSfyytkBLidf4MmUmiie4AGvqi8xGlS0z9XAy2fOrWmLiNOjo-M82QKDD-pT7ZUHDOENUKsrgCxurpOoAuGdJtxx_Ac13DyEIMgVv63oo8H03039P3uU8ysyTTPq0T_9qJd8HDuRLbNJ7wCHWN45mpyGZGh62Ygk_U9Sl9PNK4zy4tUmU4xKxv.jpg)
-
-- **Placement Implementation/PnR (Place and Route)** : PnR is the physical implementation stage where cells are placed and connected using metal routing.
-Placement decides cell locations, and routing creates physical interconnections.Final chip layout is generated during this stage.
-
-- **LEC (Logical Equivalence Check)** : LEC checks whether two versions of a design are logically equivalent. Usually RTL is compared with synthesized netlist to ensure functionality is unchanged. It verifies synthesis did not introduce logic errors.
-
-- **Antenna Rule Violations** : During fabrication, long metal wires can accumulate charge and damage transistors.  Antenna violation fixing inserts antenna diodes or changes routing to safely discharge the charge.This protects gate oxide from fabrication damage.
-
-- **STA with RC Extraction** : STA (Static Timing Analysis) checks setup/hold timing without simulation. RC extraction calculates wire resistance (R) and capacitance (C) after routing. Using extracted RC values gives accurate delay and timing analysis.
-
-- **Physical Verification** : Physical verification ensures the layout is manufacturable and matches the intended design. It mainly includes DRC, LVS, antenna checks, and layout verification. This is one of the final stages before tapeout.
-
-- **DRC (Design Rule Check)** : DRC checks whether the layout follows foundry manufacturing rules from the PDK. Examples include spacing, width, enclosure, and metal overlap rules. Any DRC violation can cause fabrication failure.
-
-- **LVS (Layout Versus Schematic)** : LVS compares the physical layout with the original circuit/netlist. It checks whether all connections and devices match correctly. LVS ensures the fabricated layout implements the intended circuit design exactly.
 
 
 # Section 3 - Get familiar to open-source EDA tools
