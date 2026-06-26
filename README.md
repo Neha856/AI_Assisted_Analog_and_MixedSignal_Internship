@@ -1,32 +1,21 @@
-# Digital VLSI SoC Design and planning
+# Analog and Mixed signal SoC physical design
 
 <details>
 
-<summary>DAY 1 - Inception of Open-Source EDA, OpenLANE & Sky130 PDK  </summary>
+<summary>WEEK 1 - Making IEEE 1-page two column report for TASK 1  </summary>
 
 
-# Section 1 - How to talk to computers 
-## Lec1 : Introduction to QFN-48 Package, chip, pads, core, die and IPs
-### What is Package 
+# Section 1 - Understanding given github repo using Chatgpt, Copilot and Codex
+## Part1 : Giving AI prompt and following its instruction
+### What is the overview of the given github repo  
 
-- In digital SoC design, a **package** is the physical outer body of the IC chip that protects the silicon die and provides pins/connections to the PCB.
-- It determines how the chip is mounted, connected, cooled, and handled in hardware systems.
-Example - **QFN48** means Quad Flat No-lead package with 48 pins.
+This repository demonstrates a complete mixed-signal physical design flow by integrating an analog 2:1 multiplexer macro into a digital implementation flow using open-source EDA tools. It includes transistor-level Verilog models, custom analog layout, LEF/LIB generation, DRC verification, and OpenLane-based RTL-to-GDSII implementation. The project provides practical insight into how analog IP blocks are abstracted and incorporated into a digital SoC design flow.
 
-`Quad Flat` → pins/connections are on all four sides.
-`No-lead` → there are no long external leads; pads are underneath the package.
-`48` → total number of electrical connections/pins.
+The original repository can be found [here](https://github.com/praharshapm/vsdmixedsignalflow).
 
-- QFN packages are popular because they are compact, have good thermal performance, and are suitable for high-speed digital designs.
+### What is Analog and Mixed Signal SoC
 
-### What is Chip,Pads, core and die
-
-- **Chip** : The final integrated circuit (IC) product used on a PCB/system. It contains electronic circuits for processing, control, memory, etc.
-- **Die**  : The small silicon piece inside the chip where the actual transistors and circuits are fabricated. One wafer contains many dies.
-- **Pads** : Metal connection points on the die boundary used to connect internal circuits to external **package** pins for signals, power, and ground.
-- **Core** : The main functional block inside the die, such as a CPU core, processor core, or DSP core that performs computations and logic operations.
-
-  ![image alt](https://github.com/Neha856/SoC_Design/blob/97f80eabe5534aeaf75e0e8568fe102e50d0a392/Screenshot%202026-05-15%20090510.png)
+An **Analog and Mixed-Signal System-on-Chip (SoC)** integrates both analog and digital circuits on a single chip. Analog blocks process continuous signals, while digital blocks perform computation and control. Typical analog IPs include ADCs, DACs, PLLs, sensors, and analog multiplexers. Mixed-signal SoCs are widely used in communication, automotive, IoT, and consumer electronics.
 
 ### What is Foundry, IPs, Foundry IPs and Macros
 
@@ -37,11 +26,23 @@ Example - **QFN48** means Quad Flat No-lead package with 48 pins.
 
 ![image alt](https://github.com/Neha856/SoC_Design/blob/00ca96ded73767c8a2cff0b590671167f70150f8/Screenshot%202026-05-15%20090952.png)
 
+### What is RTL2GDS flow of mixed signal SoC
 
-## Lec2 : RISCV Introduction
-### What is RISC-V?
+The RTL-to-GDSII flow converts a digital RTL design into a manufacturable chip layout while integrating pre-designed analog macros. The process includes synthesis, floorplanning, placement, clock tree synthesis, routing, timing verification, and GDSII generation. Analog IPs are incorporated using LEF, LIB, and Verilog abstract views to enable seamless digital implementation.
 
-RISC-V is an **open-standard processor architecture** based on the **Reduced Instruction Set Computer (RISC)** concept which is simple and modular architecture. It is easy to customize and Supports 32-bit, 64-bit, and 128-bit processors. It defines how a processor understands and executes instructions, similar to architectures like ARM Holdings ARM or Intel x86, but RISC-V is open and royalty-free.
+## Part 2 : OpenROAD Tool Installation 
+### What is OpenROAD Project
+
+The OpenROAD Project is an open-source initiative focused on developing a complete, autonomous RTL-to-GDSII ASIC design flow. It integrates multiple open-source tools to enable end-to-end chip implementation without proprietary software. The project supports industry-standard technologies such as the SKY130 PDK and promotes accessible research and education in VLSI physical design.
+
+The  repository can be found [here](https://github.com/The-OpenROAD-Project).
+
+### What is OpenROAD EDA Tools
+
+OpenROAD is an open-source Electronic Design Automation (EDA) tool that automates the digital physical design process. It performs synthesis, floorplanning, placement, clock tree synthesis, routing, timing analysis, and design verification. OpenROAD aims to provide a fully autonomous RTL-to-GDSII implementation flow for ASIC design using open-source technologies.
+
+Detailed installation steps can be found [here](docs/Installation_Guide.pdf).
+IEEE 1-page two column report can be found [here](docs/Installation_Guide.pdf).
 
 ## What is a RISC-V Instruction Set?
 
