@@ -290,8 +290,8 @@ avsdmux2x1_3v3/
 ```
 #### Analyze NETLIST/21muxprelayout.cir
 - After seeing SPICE netlist `vim NETLIST/21muxprelayout.cir`, **avsdmux2x1_3v3** is a 2 input analog multiplexer. The entire design is done with the help of OSU 180nm library. Transmission gates were used to design the analog multiplexer. The height, width and area of avsdmux2x1_3v3 is given below.
-![image](https://github.com/prithivjp/avsdmux2x1_3v3/blob/0da4ed47acf7e4da54a5c97980833b1ee9da9bf1)
-![image](https://github.com/prithivjp/avsdmux2x1_3v3/raw/master/Step_Images/sym21.PNG)
+![image alt](https://github.com/prithivjp/avsdmux2x1_3v3/blob/0da4ed47acf7e4da54a5c97980833b1ee9da9bf1)
+![image alt](https://github.com/prithivjp/avsdmux2x1_3v3/raw/master/Step_Images/sym21.PNG)
 - Their are 6 MOSFETs (M1,M2,M3,M4,M5,M6).M1 and M3 → Transmission Gate for I0,M2 and M4 → Transmission Gate for I1 and M5 and M6 → Inverter. When select=0, N001=1(because N001=!select) then M1 and M3 gets ON and I0 passess at the output.
 ```text
 M1 I0 N001 out vee n_mos l=0.18u w=0.36u
@@ -304,25 +304,10 @@ M6 N001 select vee vee n_mos
 - This design uses **Transmission gates**, not a logic inverter.The goal is: Low ON resistance (RON), Pass both logic '0' and logic '1' efficiently and Minimize signal attenuation.To compensate for the lower hole mobility in PMOS, the PMOS is made wider. This ratio is based primarily on carrier mobility, so that the NMOS and PMOS contribute similar conductance when the transmission gate is ON. NMOS : 0.36 µm, PMOS : 0.90 µm and Ratio ≈ 2.5.
 -  The 5 Voltage source is used which can be shown in below Figure. Example V6 SINE(0 1 25000000) which means the V6 is a sinewave with Offset = 0, VAmplitude = 1 V and Frequency = 25 MHz.
 
-![image]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/1e01c10aec823279a80650179a09cd86623e9469/images/2to1_mux.drawio(1).png)
 *Fig - Schematic design based on `NETLIST/21muxprelayout.cir` description.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Pre-Layout Simulation
+#### Pre-Layout Simulation
 
 Run the transistor-level schematic simulation.
 
@@ -347,36 +332,67 @@ plot select
 plot i0 out
 plot i1 out
 ```
+![image alt]()
+
+#### Understand the layout
+
+```bash
+cd ~/vsd_projects/avsdmux2x1_3v3/Layout
+magic 21muxlayout.mag
+```
+Looking at layout i can see Green = Diffusion (active region), Red = Polysilicon (gate), Blue = Metal1 and Black hatched region = N-well (PMOS region). A transistor is formed where the red polysilicon crosses the green diffusion.
+So simply looking for every red–green intersection. In layout there are 6 such intersections, corresponding to: 3 PMOS (top) and 3 NMOS (bottom). Also identified all the transistors example the middle of the layout.You should see:
+one PMOS at the top, one NMOS directly below it, both sharing the same vertical red polysilicon line. That is the inverter (M5 + M6). The gate is connected to Select. The node joining them is N001 (!Select).
+![image alt]()
+
+
+#### Verify DRC, LVS and Extract netlist
+There is no DRC and LVS error in report. Magic converts the physical layout into an electrical netlist through extraction. Typical commands are which generates the extracted SPICE netlist representing the implemented layout.
+
+```tcl
+extract all
+ext2spice
+```
+#### Post-Layout Simulation
+Analyze and run the  extracted layout netlist:
+
+```bash
+cd ~/vsd_projects/avsdmux2x1_3v3
+less NETLIST/21muxpostlayout.spice
+ngspice NETLIST/21muxpostlayout.spice
+```
+`21muxpostlayout.spice.` is most important file because it shows how the layout is converted back into a circuit.Excellent. This is the **most important file** because it shows how the **layout is converted back into a circuit**. Let's understand few examples: 
+
+- **1. Comment `* SPICE3 file created from 21layout.ext - technology: scmos`** This tells us: It is **automatically generated** by Magic. and It comes from the extracted file `21layout.ext`.
+
+- **2. Scale `.option scale=0.1u`** Magic stores dimensions in **lambda units**. This line tells SPICE:1 layout unit = 0.1 µm.
+
+- **3. Model files `.include NMOS-180nm.lib and .include PMOS-180nm.lib`** These contain the actual transistor models. Without them, SPICE would not know how NMOS and PMOS behave.
+
+- **4. Transistors** Instead of M1 M2... M6 Magic renamed them as M1000 M1001...M1005.The names **do not matter**. Only the connections matter.For example `M1005 out a_22_49# I0 VSS CMOSN` means Drain = out, Gate  = a_22_49#, Source= I0 and Bulk  = VSS. Compare with your pre-layout `M1 I0 N001 out vee n_mos` Notice that N001 became a_22_49#.
+
+- **5. Why no L=0.18u and W=0.9u?** Because .option scale = 0.1. Therefore Length 2 × 0.1 = 0.2 µmapproximately 0.18 µm Similarly Width 8 × 0.1 = 0.8 µm approximately 0.9 µm.
+
+- **6. What are these(ad=,pd=,as=,ps=)?** These were **not** in your schematic. Magic extracted them automatically. They mean ad = drain area,pd = drain perimeter,as = source area,ps = source perimeter These create junction capacitances.This is why post-layout simulation is more realistic.
+
+- **7. Voltage sources** Exactly the same as pre-layout. Only one difference: Select in Pre-layout(+0.5 ↔ -0.5) but in Post-layout(+1 ↔ -1).
+
+
+##### One interesting observation
+
+- This extracted netlist is **much cleaner than many industrial post-layout netlists**. It contains transistor geometry but **does not include explicit extracted parasitic resistors and capacitors** (e.g., `R...` or `C...` elements). That means the extraction used here is a **basic transistor extraction with parasitic element**, suitable for functional verification, rather than a full parasitic RC extraction used for sign-off.
+![image alt]()
+
+- The post-layout simulation produced the expected multiplexer functionality with minor transient spikes observed during switching transitions. These spikes arise from layout-induced parasitic effects and realistic transistor geometries introduced during extraction, demonstrating the non-ideal behavior of the physical implementation compared to the pre-layout simulation.
+
+
+➡️ 7. LEF generation
+
+➡️ 8. Integration into OpenLane
 
 
 
 
-
-eha@localhost:~/vsd_projects/avsdmux2x1_3v3$ cat NETLIST/21muxprelayout.cir
-* 21mux prelayout
-V1 vdd 0 1
-V2 vee 0 -1
-V6 I0 0 SINE(0 1 25000000)
-V10 I1 0 PULSE(-1 1 0.0001n 0.0001n 0.0001n 0.1u 0.2u)
-M1 I0 N001 out vee n_mos l=0.18u w=0.36u
-M2 I1 select out vee n_mos l=0.18u w=0.36u
-M3 out select I0 vdd p_mos l=0.18u w=0.9u
-M4 out N001 I1 vdd p_mos l=0.18u w=0.9u
-M5 vdd select N001 vdd p_mos l=0.18u w=0.9u
-M6 N001 select vee vee n_mos l=0.18u w=0.36u
-V11 select 0 PULSE(.5 -.5 0.1n 0.1n 0.1n 1u 2u)
-.model NMOS NMOS
-.model PMOS PMOS
-.tran 0.001u 4u
-.inc osulib.lib
-.control
-run
-plot V(I0)
-plot V(I1)
-plot V(select)
-plot V(out)
-.endc
-.end   we cant change small i0 
 
 
 
@@ -460,39 +476,7 @@ This verifies the functional operation of the 2:1 transmission-gate multiplexer 
 
 ---
 
-## Layout Extraction
 
-Magic converts the physical layout into an electrical netlist through extraction.
-
-Typical commands are:
-
-```tcl
-extract all
-ext2spice
-```
-
-This generates the extracted SPICE netlist representing the implemented layout.
-
----
-
-## Post-Layout Simulation
-
-Run the extracted layout netlist:
-
-```bash
-ngspice NETLIST/21muxpostlayout.spice
-```
-
-The same signals are plotted:
-
-```spice
-plot V(select)
-plot V(I0)
-plot V(I1)
-plot V(out)
-```
-
----
 
 ## Comparison of Pre-Layout and Post-Layout Results
 
