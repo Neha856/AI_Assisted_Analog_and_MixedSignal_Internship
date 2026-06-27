@@ -381,7 +381,7 @@ ngspice NETLIST/21muxpostlayout.spice
 ##### One interesting observation
 
 - This extracted netlist is **much cleaner than many industrial post-layout netlists**. It contains transistor geometry but **does not include explicit extracted parasitic resistors and capacitors** (e.g., `R...` or `C...` elements). That means the extraction used here is a **basic transistor extraction with parasitic element**, suitable for functional verification, rather than a full parasitic RC extraction used for sign-off.
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/fa6932c18d5208319ad3c35575c97293c663fc00/images/2to1_postsimulation.jpg.jpeg)
 
 - Post-layout parasitics introduce a small RC delay that smooths switching transitions, reducing the apparent spikes compared to the ideal pre-layout simulation.
 
