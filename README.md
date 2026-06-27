@@ -343,7 +343,7 @@ magic 21muxlayout.mag
 Looking at layout i can see Green = Diffusion (active region), Red = Polysilicon (gate), Blue = Metal1 and Black hatched region = N-well (PMOS region). A transistor is formed where the red polysilicon crosses the green diffusion.
 So simply looking for every red–green intersection. In layout there are 6 such intersections, corresponding to: 3 PMOS (top) and 3 NMOS (bottom). Also identified all the transistors example the middle of the layout.You should see:
 one PMOS at the top, one NMOS directly below it, both sharing the same vertical red polysilicon line. That is the inverter (M5 + M6). The gate is connected to Select. The node joining them is N001 (!Select).
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/182b20eeaf38f1a580444ab9908869ea2257ab6a/images/Screenshot%20From%202026-06-26%2014-35-00.png)
 
 
 #### Verify DRC, LVS and Extract netlist
