@@ -305,7 +305,7 @@ M6 N001 select vee vee n_mos
 -  The 5 Voltage source is used which can be shown in below Figure. Example V6 SINE(0 1 25000000) which means the V6 is a sinewave with Offset = 0, VAmplitude = 1 V and Frequency = 25 MHz.
 
 ![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/1e01c10aec823279a80650179a09cd86623e9469/images/2to1_mux.drawio(1).png)
-*Fig - Schematic design based on `NETLIST/21muxprelayout.cir` description.
+             *Fig - Schematic design based on `NETLIST/21muxprelayout.cir` description.
 
 #### Pre-Layout Simulation
 
@@ -332,7 +332,7 @@ plot select
 plot i0 out
 plot i1 out
 ```
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/4bac2d534f562ccafb962f88b28660840163a536/images/2to1_presimulation.jpg.jpeg)
 
 #### Understand the layout
 
@@ -383,7 +383,7 @@ ngspice NETLIST/21muxpostlayout.spice
 - This extracted netlist is **much cleaner than many industrial post-layout netlists**. It contains transistor geometry but **does not include explicit extracted parasitic resistors and capacitors** (e.g., `R...` or `C...` elements). That means the extraction used here is a **basic transistor extraction with parasitic element**, suitable for functional verification, rather than a full parasitic RC extraction used for sign-off.
 ![image alt]()
 
-- The post-layout simulation produced the expected multiplexer functionality with minor transient spikes observed during switching transitions. These spikes arise from layout-induced parasitic effects and realistic transistor geometries introduced during extraction, demonstrating the non-ideal behavior of the physical implementation compared to the pre-layout simulation.
+- Post-layout parasitics introduce a small RC delay that smooths switching transitions, reducing the apparent spikes compared to the ideal pre-layout simulation.
 
 
 ➡️ 7. LEF generation
