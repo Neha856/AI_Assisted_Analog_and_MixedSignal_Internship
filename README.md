@@ -236,11 +236,285 @@ Flop Ratio = (No. of D Flip-Flops) / (Total No. of Cells)
 </details>
 
 <details> 
-	<summary> DAY 2 - Good floorplan vs bad floorplan and introduction to library cells </summary>
+	<summary> WEEK 2 - Analog Macro Design and Simulation </summary>
 
-# Section 1 - How to talk to computers 
-## Lec1 : Chip Floor planning considerations
-### Utilization factor and aspect ratio 
+# Section 1 - Analog macro understanding  
+## Learning 1 : What is Analog Macro
+### Analog Macro 
+
+An **Analog Macro** or **Analog Intellectual Property (IP)** is a pre-designed and verified analog circuit that can be reused in larger integrated circuits. Unlike digital logic synthesized from RTL, analog macros are manually designed and laid out to meet strict electrical specifications. They are integrated into a digital SoC using abstract views such as **LEF**, **LIB**, and **Verilog**.
+
+### Analog Macro Used in This Repository
+
+The mixed-signal flow uses a **2:1 Analog Multiplexer (AMUX2_3V)** as the analog macro. This macro was originally developed in a separate repository and later integrated into the OpenLane digital implementation flow.
+
+### Clone the Analog Macro Repository
+
+```bash
+git clone https://github.com/prithivjp/avsdmux2x1_3v3.git
+cd avsdmux2x1_3v3
+```
+### Installing ngspice
+
+The pre-layout and post-layout simulations were performed using **ngspice**.
+
+```bash
+cd ~/Downloads
+wget https://sourceforge.net/projects/ngspice/files/ng-spice-rework/46/ngspice-46.tar.gz
+tar -xzf ngspice-46.tar.gz
+cd ngspice-46
+./configure --with-x
+make -j$(nproc)
+sudo make install
+# verify installation
+ngspice -v
+```
+### Repository Structure
+
+```text
+avsdmux2x1_3v3/
+├── Layout/
+    ├── 21muxlayout.mag
+    └── 21muxlayout.png 
+├── NETLIST/
+    ├── 21muxprelayout.cir
+    ├── 21muxpostlayout.spice
+    ├── NMOS-180nm.lib
+    ├── PMOS-180nm.lib
+    └── osulib.lib
+├── Characteristics/
+├── MAGIC/
+    ├── SCN6M_SUBM.10.tech
+    └── magic.sh 
+└── README.md
+```
+#### Analyze NETLIST/21muxprelayout.cir
+- After seeing SPICE netlist `vim NETLIST/21muxprelayout.cir`, **avsdmux2x1_3v3** is a 2 input analog multiplexer. The entire design is done with the help of OSU 180nm library. Transmission gates were used to design the analog multiplexer. The height, width and area of avsdmux2x1_3v3 is given below.
+![image](https://github.com/prithivjp/avsdmux2x1_3v3/blob/0da4ed47acf7e4da54a5c97980833b1ee9da9bf1)
+![image](https://github.com/prithivjp/avsdmux2x1_3v3/raw/master/Step_Images/sym21.PNG)
+- Their are 6 MOSFETs (M1,M2,M3,M4,M5,M6).M1 and M3 → Transmission Gate for I0,M2 and M4 → Transmission Gate for I1 and M5 and M6 → Inverter. When select=0, N001=1(because N001=!select) then M1 and M3 gets ON and I0 passess at the output.
+```text
+M1 I0 N001 out vee n_mos l=0.18u w=0.36u
+M3 out select I0 vdd p_mos l=0.18u w=0.9u
+M2 I1 select out vee n_mos
+M4 out N001 I1 vdd p_mos
+M5 vdd select N001 vdd p_mos
+M6 N001 select vee vee n_mos
+```
+- This design uses **Transmission gates**, not a logic inverter.The goal is: Low ON resistance (RON), Pass both logic '0' and logic '1' efficiently and Minimize signal attenuation.To compensate for the lower hole mobility in PMOS, the PMOS is made wider. This ratio is based primarily on carrier mobility, so that the NMOS and PMOS contribute similar conductance when the transmission gate is ON. NMOS : 0.36 µm, PMOS : 0.90 µm and Ratio ≈ 2.5.
+-  The 5 Voltage source is used which can be shown in below Figure. Example V6 SINE(0 1 25000000) which means the V6 is a sinewave with Offset = 0, VAmplitude = 1 V and Frequency = 25 MHz.
+
+![image]()
+*Fig - Schematic design based on `NETLIST/21muxprelayout.cir` description.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Pre-Layout Simulation
+
+Run the transistor-level schematic simulation.
+
+```bash
+ngspice NETLIST/21muxprelayout.cir
+```
+**Error** is that the netlist uses uppercase node names (I0, I1, OUT, SELECT), but ngspice internally converts them to lowercase.So after the **.control** block failed, so there is no active plot.
+
+```text
+# Error comes like that 
+ngspice 1 -> display
+There are no vectors currently active.
+```
+```bash
+#rectifying error by reload the circuit
+source NETLIST/21muxprelayout.cir
+source /home/neha/vsd_projects/avsdmux2x1_3v3/NETLIST/21muxprelayout.cir
+run
+display all
+#error resolved now plotting waveform separately for clear cerification
+plot select
+plot i0 out
+plot i1 out
+```
+
+
+
+
+
+eha@localhost:~/vsd_projects/avsdmux2x1_3v3$ cat NETLIST/21muxprelayout.cir
+* 21mux prelayout
+V1 vdd 0 1
+V2 vee 0 -1
+V6 I0 0 SINE(0 1 25000000)
+V10 I1 0 PULSE(-1 1 0.0001n 0.0001n 0.0001n 0.1u 0.2u)
+M1 I0 N001 out vee n_mos l=0.18u w=0.36u
+M2 I1 select out vee n_mos l=0.18u w=0.36u
+M3 out select I0 vdd p_mos l=0.18u w=0.9u
+M4 out N001 I1 vdd p_mos l=0.18u w=0.9u
+M5 vdd select N001 vdd p_mos l=0.18u w=0.9u
+M6 N001 select vee vee n_mos l=0.18u w=0.36u
+V11 select 0 PULSE(.5 -.5 0.1n 0.1n 0.1n 1u 2u)
+.model NMOS NMOS
+.model PMOS PMOS
+.tran 0.001u 4u
+.inc osulib.lib
+.control
+run
+plot V(I0)
+plot V(I1)
+plot V(select)
+plot V(out)
+.endc
+.end   we cant change small i0 
+
+
+
+
+
+
+## Understanding the Important Files
+
+### Layout Directory
+
+Contains the physical layout designed using Magic.
+
+```text
+Layout/
+├── 21muxlayout.mag
+└── 21muxlayout.png
+```
+
+**.mag** → Magic layout database used for editing and verification.
+
+---
+
+### NETLIST Directory
+
+Contains both schematic and extracted SPICE netlists.
+
+```text
+NETLIST/
+├── 21muxprelayout.cir
+├── 21muxpostlayout.spice
+├── NMOS-180nm.lib
+├── PMOS-180nm.lib
+└── osulib.lib
+```
+
+**21muxprelayout.cir**
+
+* Transistor-level schematic netlist
+* Used for ideal circuit simulation
+
+**21muxpostlayout.spice**
+
+* Automatically extracted from the Magic layout
+* Contains extracted transistor geometries
+* Used for post-layout verification
+
+---
+
+## Opening the Layout
+
+Launch Magic and open the layout:
+
+```bash
+cd Layout
+magic 21muxlayout.mag
+```
+
+The layout contains:
+
+* PMOS transistors
+* NMOS transistors
+* Metal interconnects
+* Polysilicon gates
+* Input/output pins
+* Power rails
+
+---
+
+
+
+The following signals were analyzed:
+
+```spice
+plot V(I0)
+plot V(I1)
+plot V(select)
+plot V(out)
+```
+
+This verifies the functional operation of the 2:1 transmission-gate multiplexer before layout implementation.
+
+---
+
+## Layout Extraction
+
+Magic converts the physical layout into an electrical netlist through extraction.
+
+Typical commands are:
+
+```tcl
+extract all
+ext2spice
+```
+
+This generates the extracted SPICE netlist representing the implemented layout.
+
+---
+
+## Post-Layout Simulation
+
+Run the extracted layout netlist:
+
+```bash
+ngspice NETLIST/21muxpostlayout.spice
+```
+
+The same signals are plotted:
+
+```spice
+plot V(select)
+plot V(I0)
+plot V(I1)
+plot V(out)
+```
+
+---
+
+## Comparison of Pre-Layout and Post-Layout Results
+
+The functional behavior of the multiplexer remained unchanged after layout implementation. However, the post-layout simulation exhibited small switching spikes during signal transitions due to extracted device geometries and layout parasitic effects. This demonstrates the importance of post-layout verification before integrating the analog macro into a mixed-signal design flow.
+
+---
+
+## Summary
+
+During this study, the following concepts were explored:
+
+* Understanding Analog Macros and IP reuse
+* Cloning and exploring the analog macro repository
+* Installing and using ngspice
+* Understanding transistor-level SPICE netlists
+* Running pre-layout simulations
+* Exploring the Magic layout (.mag)
+* Understanding layout extraction
+* Running post-layout simulations
+* Comparing pre-layout and post-layout waveforms
+* Learning the complete analog macro verification flow prior to OpenLane integration
+
 
 - **Utilization Factor:** Utilization factor tells how much chip core area is occupied by standard cells. Helps decide free space available for routing. Very    high utilization causes congestion and routing problems and Very low utilization wastes chip area.Typical value: 50% – 70%.
                          **Utilisation Factor** = (Area occupied by Netlist) / (Total Core Area) 
