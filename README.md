@@ -338,7 +338,7 @@ magic -T sky130A.tech
 - The size of the supply nets are fixed as shown below. The dimensions must be followed.
 ![image alt](https://github.com/praharshapm/vsdmixedsignalflow/raw/master/images/power%20dimensions.JPG)
 - The top level cell does not include the whole layout.
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/a45a253a7327df3176b652c52abf753d8230b21b/images/Screenshot%20From%202026-06-28%2000-01-26.png)
 
 #### Verify DRC 
 DRC (Design Rule Check) is a verification step in VLSI design where the layout is checked against the foundry’s manufacturing rules. In simple words, it ensures that the chip layout follows spacing, width, and overlap etc rules so the design can be fabricated correctly.Inside Magic Expected: Total DRC errors = 0
@@ -711,7 +711,7 @@ This is where OpenLane decides "Where should every block be placed?" At this sta
 magic -T ~/sky130A.tech lef read ~/merged.lef def read design_mux.floorplan.def
 ```
 
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/a45a253a7327df3176b652c52abf753d8230b21b/images/floorplan.jpg.jpeg)
 
 
 ## Learning 3 : Physical Design
@@ -769,7 +769,7 @@ After
 tap_decap_or
 ```
 
-This inserts Tap Cells. Tap cells connect **P-substrate <-> N-well** to **VSS <-> VDD** This prevents Latch-up and Floating wells
+This inserts Tap Cells. Tap cells connect **P-substrate <-> N-well** to **VSS <-> VDD** This prevents Latch-up and Floating wells. 
 
 #### Decap Cells
 
@@ -786,7 +786,7 @@ lef read merged.lef \
 def read design_mux.placement.def
 ```
 
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/a45a253a7327df3176b652c52abf753d8230b21b/images/placement.jpg.jpeg)
 
 ### PDN Generation
 
