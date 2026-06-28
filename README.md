@@ -831,10 +831,18 @@ Now the DEF contains Placement + Routing so Magic displays both cells and interc
 ```tcl
 run_magic_drc
 ```
-Magic checks Minimum spacing Minimum width, Metal overlap, Via spacing, Enclosure and Technology rule violations.If violations exist, they must be fixed. opens the DRC layout so you can inspect the errors.
+Magic checks Minimum spacing Minimum width, Metal overlap, Via spacing, Enclosure and Technology rule violations.If violations exist, they must be fixed. opens the DRC layout so you can inspect the errors. **My mistake** is that i am using below command to open mag file, which rectified after using **AI**. 
+```bash
+magic -T ../sky130A.tech lef read results/merged.lef def read results/DRC/design_mux.drc.mag
+```
+![image alt]()
+
+**Why did DRC=10242 appear?**
+
+The DRC=10242 indication was not due to actual layout violations. It occurred because the layout was opened using an incorrect command that mixed LEF/DEF loading with a Magic (.mag) layout. As a result, Magic loaded or retained **DRC marker tiles**(DRC marker tiles are small annotation regions that Magic creates to mark the locations where DRC violations were detected during a previous DRC run. These markers are only for visualization and debugging—they do not represent current violations.) instead of performing a fresh DRC verification. Running drc count confirmed 0 actual DRC violations, indicating that the displayed error tiles were only stored markers and not real design-rule errors.So the correct way to verify drc is 
  
  ```bash
-magic -T sky130A.tech design_mux.drc.mag
+magic -T ../sky130A.tech results/DRC/design_mux.drc.mag
 ```
 ![image alt]()
 
@@ -844,18 +852,31 @@ magic -T sky130A.tech design_mux.drc.mag
 ```tcl
 run_magic
 ```
-The final layout output is in the form of `design_mux.mag`. Magic converts the routed DEF into the final layout. 
+The final layout output is in the form of `design_mux.mag` and `design_mux.gds`. Magic converts the routed DEF into the final layout. 
 ```javascript 
-magic -T ~/sky130A.tech design_mux.mag
+magic -T ../sky130A.tech results/Layout/design_mux.mag
 ```
+![image alt]()
+
+#### What is GDS|| file
+
+After successful routing and DRC verification, the final GDSII file was generated using the Magic backend in OpenLane. The GDSII file represents the complete physical layout of the design and is the standard format delivered to semiconductor foundries for fabrication. The generated GDSII was then opened in KLayout for final visual inspection of the chip layout, routing, standard cells, and embedded analog macro.KLayout is used to inspect the final chip layout before fabrication.
+```bash
+# Launch KLayout
+klayout
+# navigate to
+File → Open → design_mux.gds
+# To correctly display Sky130 layers
+Tools → Manage Technologies → sky130
+```
+![image alt]()
 
 
-
-#### Important Notes Why remove VDD/VSS from the Verilog?
+##### Important Notes Why remove VDD/VSS from the Verilog?
 
 The analog macro's **physical layout** already contains the power connections. If the wrapper Verilog also declares power pins in a way that conflicts with the integration flow, OpenLane may create duplicate or inconsistent connections. The repository's wrapper keeps the functional interface simple (I0, I1, `select`, `out`) while the physical power connectivity is handled by the LEF/layout and the generated PDN.
 
-#### Why add the LEF twice?
+##### Why add the LEF twice?
 
 We saw `config.tcl + add_lefs`. This is because:
 
@@ -863,104 +884,7 @@ We saw `config.tcl + add_lefs`. This is because:
 * `add_lefs` loads the macro's LEF into the current interactive OpenLane session so the tools can use its physical abstract immediately.
 
 
-# Complete Mixed-Signal Flow
-
-```text
-Analog Design
-─────────────
-Schematic
-      │
-      ▼
-Layout (Magic)
-      │
-      ▼
-DRC
-      │
-      ▼
-Extraction
-      │
-      ▼
-Post-layout Simulation
-      │
-      ▼
-LEF + LIB + Verilog Wrapper
-      │
-      ▼
-Analog Macro Ready
-─────────────────────────────────────
-OpenLane Physical Design
-─────────────────────────────────────
-Create Design
-      │
-      ▼
-Synthesis
-      │
-      ▼
-Floorplan
-      │
-      ▼
-IO Placement
-      │
-      ▼
-Global Placement
-      │
-      ▼
-Detailed Placement
-      │
-      ▼
-Tap/Decap Insertion
-      │
-      ▼
-PDN Generation
-      │
-      ▼
-Routing
-      │
-      ▼
-DRC
-      │
-      ▼
-Final Layout (.mag/.gds)
-```
-
-This completes the end-to-end picture: you first create and verify an analog hard macro, then provide its LEF, LIB, and Verilog wrapper so OpenLane can integrate it with synthesized digital logic, place it on the chip, connect power and signals, verify the layout, and generate the final manufacturable design.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Complete Mixed-Signal Flow
 
 
 ```text
@@ -1014,39 +938,61 @@ Floorplanning
       │  Uses:
       │  • AMUX2_3V.lef
       ▼
-Placement
+IO Placement
       │
       ▼
-Clock Tree Synthesis (if required)
+Global Placement
+      │
+      ▼
+Detailed Placement
+      │
+      ▼
+Tap/Decap Insertion
+      │
+      ▼
+PDN Generation
       │
       ▼
 Routing
       │
       ▼
-Final GDSII
+DRC
+      │
+      ▼
+Final Layout (.mag/.gds)
 ```
 
-
-Editing the spice model file for analysis through simulation.
-![image alt](https://github.com/Neha856/SoC_Design/blob/8bbe0c5c96356d998b145da4e37f0c08e059f505/Screenshot%202026-05-21%20154546.png)
-
+This completes the end-to-end picture: We first create and verify an analog hard macro, then provide its LEF, LIB, and Verilog wrapper so OpenLane can integrate it with synthesized digital logic, place it on the chip, connect power and signals, verify the layout, and generate the final manufacturable design.
 
 </details>
 
 <details> 
 	<summary> Tools & Environment </summary>
+```text
+	
+| Tool                           | Purpose                                                                                                                                              
+| ------------------------------ | --------------------------------------------------------------------------------
 
-| Tool | Purpose |
-|---|---|
-| **OpenLANE** | RTL-to-GDSII automation flow |
-| **Yosys** | RTL synthesis |
-| **OpenROAD** | Floorplan, Placement, CTS, Routing |
-| **Magic** | Layout editor, DRC, LVS |
-| **OpenSTA** | Static Timing Analysis |
-| **ngspice** | SPICE simulation |
-| **TritonRoute** | Detailed routing |
-| **Netgen** | LVS (Layout vs Schematic) |
-| **Sky130 PDK** | SkyWater 130nm open-source PDK |
+| **Magic VLSI**                 | Used for custom analog layout design, DRC verification, parasitic extraction                                         (`.ext`), SPICE netlist generation, LEF generation, and GDSII creation. 
+
+| **NGSpice**                    | Used to perform pre-layout and post-layout transient simulations and compare                                         circuit performance before and after layout parasitics.  
+
+| **OpenLane**                   | Complete open-source RTL-to-GDSII flow used for synthesis, floorplanning,
+                                   placement, PDN generation, routing, DRC, and final layout generation. 
+								   
+| **OpenROAD**                   | Physical design engine within OpenLane responsible for floorplanning, placement,                                     clock optimization, routing, and timing-driven optimization. 
+
+| **Yosys**                      | RTL synthesis tool that converts Verilog RTL into a gate-level netlist using the                                     Sky130 standard cell library. 
+
+| **Magic Extractor**            | Extracts the SPICE netlist from the physical layout for post-layout simulation                                       and verification.  
+
+| **KLayout**                    | Used to visualize and inspect the final GDSII layout before fabrication.                                                                             
+| **Sky130 PDK**                 | Open-source 130 nm Process Design Kit providing technology files, design rules,                                      standard cells, device models, LEF/Liberty files, and layout layers. 
+| **Docker**                     | Provides a reproducible environment for running the OpenLane/OpenROAD flow                                           without dependency conflicts.                                             
+| **Git & GitHub**               | Used for version control, project documentation, and collaboration.                                                                                  
+| **Perl (`verilog_to_lib.pl`)** | Converts the Verilog description of the analog macro into a Liberty (`.lib`) file
+                                   for synthesis and timing integration.
+```								   
 
 </details>
 
@@ -1056,6 +1002,7 @@ Editing the spice model file for analysis through simulation.
 * [Kunal Ghosh](https://github.com/kunalg123), Co-founder, VSD Corp. Pvt. Ltd.
 * [Nickson P Jose](https://github.com/nickson-jose), Physical Design Engineer, Intel Corporation.
 * [R. Timothy Edwards](https://github.com/RTimothyEdwards), Senior Vice President of Analog and Design, efabless Corporation.
+* [praharshapm] (https://github.com/praharshapm/vsdmixedsignalflow).
 
 
 </details>
