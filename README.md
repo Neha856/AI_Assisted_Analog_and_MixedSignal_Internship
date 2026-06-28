@@ -6,7 +6,7 @@
 
 
 # Section 1 - Understanding given github repo using Chatgpt, Copilot and Codex
-## Part1 : Giving AI prompt and following its instruction
+## Learning 1 : Giving AI prompt and following its instruction
 ### What is the overview of the given github repo  
 
 This repository demonstrates a complete mixed-signal physical design flow by integrating an analog 2:1 multiplexer macro into a digital implementation flow using open-source EDA tools. It includes transistor-level Verilog models, custom analog layout, LEF/LIB generation, DRC verification, and OpenLane-based RTL-to-GDSII implementation. The project provides practical insight into how analog IP blocks are abstracted and incorporated into a digital SoC design flow.
@@ -32,7 +32,7 @@ The RTL-to-GDSII flow converts a digital RTL design into a manufacturable chip l
 ![image alt](https://github.com/Neha856/SoC_Design/blob/e103318e668825ed5329ff25b3f162d11c2ff586/Screenshot%202026-05-16%20123414.png)
 
 
-## Part 2 : OpenROAD Tool Installation 
+## Learning 2 : OpenROAD Tool Installation 
 ### What is OpenROAD Project
 
 The OpenROAD Project is an open-source initiative focused on developing a complete, autonomous RTL-to-GDSII ASIC design flow. It integrates multiple open-source tools to enable end-to-end chip implementation without proprietary software. The project supports industry-standard technologies such as the SKY130 PDK and promotes accessible research and education in VLSI physical design.
@@ -126,7 +126,7 @@ IEEE 1-page two column report can be found [here](https://github.com/Neha856/AI_
 
 
 # Section 3 - Get familiar to open-source EDA tools
-## Lec1 : OpenLANE Directory structure 
+## Learning 1 : OpenLANE Directory structure 
 ### OpenLane Directory Structure
 
 OpenLane has folders for:
@@ -140,7 +140,7 @@ OpenLane has folders for:
 
 PDK is a collection of files provided by foundry to manufacture chips. It contains technology rules, transistor models, standard cells, LEF/GDS files, timing data, etc. Without PDK, tools do not know how to build the chip physically. They have three pdk folder
 
-- **skywater-pdk:**  SkyWater is the foundry/company. SkyWater PDK is the open-source 130nm manufacturing technology released by Google + SkyWater.
+- **skywatar-pdk:**  SkyWater is the foundry/company. SkyWater PDK is the open-source 130nm manufacturing technology released by Google + SkyWater.
 - **sky130A:** sky130A is one specific version/variant of the Sky130 technology files used by OpenLane. It contains libraries, rules, timing, LEF, Magic tech files, SPICE models, etc.
 - **OpenPDKs:** OpenPDKs converts raw foundry data into tool-compatible format. It prepares files for Magic, Netgen, OpenROAD, KLayout, etc.
 
@@ -170,73 +170,12 @@ Technology file defines fabrication rules like layer names, spacing rules, width
 Process corners represent manufacturing variations like `fast`, `slow`, `typical` and their combination. They help check chip timing under different conditions because real chips are never perfectly identical.
 
 
-## Lec2 : Design Preparation Step
-### LAB : Setting Up Codespace, Invoking OpenLANE and Running OpenLANE for picorv32a
 
- - **1.** The very first step is to navigate to the OpenLANE working directory and starts the OpenLane Docker container and mounts/connects your local OpenLane files, PDKs, and workspace directories inside the container environment.
-  
-```bash
-cd ~/Desktop/OpenLane
-make mount
-```
- - **2.** Starts OpenLane in interactive TCL mode. This allows you to manually run commands step-by-step. Without `-interactive`, OpenLane runs the complete flow automatically from synthesis to routing in one shot and then Loads the OpenLane TCL package/version into memory. It enables all OpenLane commands.
-  
-```bash  
-./flow.tcl -interactive
-package require openlane 1.0.2
-```
-
- - **3.** Prepares the design environment for the selected design. It reads config.tcl, loads RTL files, loads PDK and libraries, creates run directory, prepares LEF/library files for flow execution also OpenLane prepares and merges LEF files from standard cell libraries and technology LEFs into a single merged LEF file (`merged.nom.lef`) used later by floorplan, placement, and routing tools.
-
-  ```tcl
-prep -design picorv32a
-```
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/14f837c848a55b775ffa3c5e522d8fa270e95e65/Screenshot%202026-05-16%20214243.png)
-
-## Lec3 : Review files after design prep and run synthesis 
-### Running Synthesis
-
-```tcl
-run_synthesis
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/24caba66c092c8214e7564dc7c0e02836cabaac2/Screenshot%202026-05-16%20222940.png)
-
-After Synthesis my picorv.def file is not visible in vsd explorer so i have used below command.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/d0dd7188427661ad3a47cd45a325f1f75e9b9498/Screenshot%202026-05-16%20222154.png)
-
-### What is config.tcl
-
-This is the main design configuration file. It contains design name, clock period, Verilog source files, PDK/library settings, floorplan parameters, synthesis and routing settings. It tells OpenLane how to process the design.
-
-
-
-## Lec4 : OpenLANE Project Git Link Description
-
-OpenLane automates the complete physical design flow like synthesis, floorplanning, placement, clock tree synthesis, routing, DRC/LVS checks. The GitHub repository contains OpenLane scripts, flow automation, sample designs, Docker setup, configuration files, tutorials and documentation.
-
-[Efabless OpenLane GitHub Repository](https://github.com/The-OpenROAD-Project/OpenLane?utm_source=chatgpt.com)
-
-[Watch Video](https://www.youtube.com/playlist?list=PLUg3wIOWD8yoZCg9XpFSgEgljx6MSdm9L)
-
-
-## Lec5 : Steps to characterize synthesis results 
-After synthesis completes, we can calculate the **flop ratio** — a useful sanity check. Helps understand how much sequential logic is present in design.
-Higher flop ratio usually increases clock network complexity and power. 
-
-![image.alt](https://github.com/Neha856/SoC_Design/blob/24caba66c092c8214e7564dc7c0e02836cabaac2/Screenshot%202026-05-16%20223035.png)
-
-```text
-Flop Ratio = (No. of D Flip-Flops) / (Total No. of Cells)
-           = 1613 / 15762
-           ≈ 0.1023  →  ~10.23%
-```
 
 </details>
 
 <details> 
-	<summary> WEEK 2 - Analog Macro Design and Simulation </summary>
+	<summary> WEEK 2 - Analog Macro Design and Verification for TASK 2 </summary>
 
 # Section 1 - Analog macro understanding  
 ## Learning 1 : What is Analog Macro
@@ -386,1281 +325,711 @@ ngspice NETLIST/21muxpostlayout.spice
 - Post-layout parasitics introduce a small RC delay that smooths switching transitions, reducing the apparent spikes compared to the ideal pre-layout simulation.
 
 
-➡️ 7. LEF generation
-
-➡️ 8. Integration into OpenLane
-
-
-
-
-
-
-
-
-
-
-## Understanding the Important Files
-
-### Layout Directory
-
-Contains the physical layout designed using Magic.
-
-```text
-Layout/
-├── 21muxlayout.mag
-└── 21muxlayout.png
-```
-
-**.mag** → Magic layout database used for editing and verification.
-
----
-
-### NETLIST Directory
-
-Contains both schematic and extracted SPICE netlists.
-
-```text
-NETLIST/
-├── 21muxprelayout.cir
-├── 21muxpostlayout.spice
-├── NMOS-180nm.lib
-├── PMOS-180nm.lib
-└── osulib.lib
-```
-
-**21muxprelayout.cir**
-
-* Transistor-level schematic netlist
-* Used for ideal circuit simulation
-
-**21muxpostlayout.spice**
-
-* Automatically extracted from the Magic layout
-* Contains extracted transistor geometries
-* Used for post-layout verification
-
----
-
-## Opening the Layout
-
-Launch Magic and open the layout:
-
+# Section 2 - Analog macro integration 
+## Learning 1 : What is AMUX2_3V.mag? and why needed?
+### What is AMUX2_3V?
+It is same as `avsdmux2x1_3v3` but The original repository (avsdmux2x1_3v3) contains a **180nm OSU library** layout.It cannot be used directly in OpenLane because OpenLane uses **SKY130**. So opened Magic with the SKY130 technology and drew the same 2:1 transmission-gate MUX manually which saved as `AMUX2_3V.mag`.
 ```bash
-cd Layout
-magic 21muxlayout.mag
+magic -T sky130A.tech
 ```
+#### Tips for IP design using sky130 technology
+- According to the height of the macro, the number of supply nets (power and ground) must be changed. For example, for dual height macro, there must be 3 supply nets( VDD-VSS-VDD). This is because it would be placed between standard cells and the power and ground net connectivity would be lost.
+- The supply nets must be horizontal for them to fit into the rails.
+- The size of the supply nets are fixed as shown below. The dimensions must be followed.
+![image alt](https://github.com/praharshapm/vsdmixedsignalflow/raw/master/images/power%20dimensions.JPG)
+- The top level cell does not include the whole layout.
+![image alt]()
 
-The layout contains:
-
-* PMOS transistors
-* NMOS transistors
-* Metal interconnects
-* Polysilicon gates
-* Input/output pins
-* Power rails
-
----
-
-
-
-The following signals were analyzed:
-
-```spice
-plot V(I0)
-plot V(I1)
-plot V(select)
-plot V(out)
+#### Verify DRC 
+DRC (Design Rule Check) is a verification step in VLSI design where the layout is checked against the foundry’s manufacturing rules. In simple words, it ensures that the chip layout follows spacing, width, and overlap etc rules so the design can be fabricated correctly.Inside Magic Expected: Total DRC errors = 0
+```tcl
+drc check
+drc count
+drc why
 ```
+#### Extract SPICE
+An extracted SPICE netlist is the text file generated after running layout extraction in Magic. It contains the transistor devices (MOSFETs) and their connections, plus basic parasitic elements (like capacitances) derived from the layout.Generated: AMUX2_3V.spice
+```tcl
+extract all
+# Tell When you generate the SPICE netlist, write it in an LVS-friendly format
+ext2spice lvs
+ext2spice
+```
+#### LVS (Layout Versus Schematic) Checks 
 
-This verifies the functional operation of the 2:1 transmission-gate multiplexer before layout implementation.
+It is a verification step in chip design where the extracted netlist from the layout is compared against the original schematic/netlist. In simple words, it checks that the layout we drew really matches the intended circuit connectivity.This repository is **not intended to demonstrate the complete custom IC design flow**. Its purpose is to show how an **already-designed analog macro is integrated** into a digital OpenLane/OpenROAD flow. Since schematic spice netlist is missing i am not able to perform LVS Checks. 
 
----
+# Section 3 - Required input file generation using AI  
+## Learning : LEF, LIB and Verilog File generation
+### LEF File (Library Exchange Format) Generation
 
+LEF gives physical abstract information like cell width/height, pin locations, routing blockages, metal layers. Used during floorplan and placement.Generated `AMUX2_3V.lef`
+```tcl
+lef write AMUX2_3V
+```
+### Verilog File generation using raven-picorv32 
 
+The verilog file for analog multiplexer can be procured from [click here](https://github.com/efabless/raven-picorv32/blob/master/verilog/AMUX2_3V.v). To get the repository:
+```bash
+git clone https://github.com/efabless/raven-picorv32.git
+```
+#### Why clone raven-picorv32?
 
-## Comparison of Pre-Layout and Post-Layout Results
+Because OpenLane cannot synthesize only an analog macro. OpenLane needs a top-level digital design. That top-level design already exists in the raven-picorv32 repository.We are not copying the layout, we copy the top-level Verilog that instantiates the analog MUX.![shown here]()
+```text
+raven-picorv32
+      │
+      ├── CPU
+      ├── SPI
+      ├── GPIO
+      └── Analog MUX (to be replaced by AMUX2_3V)
+```
+#### Why is AMUX2_3V.v needed?
 
-The functional behavior of the multiplexer remained unchanged after layout implementation. However, the post-layout simulation exhibited small switching spikes during signal transitions due to extracted device geometries and layout parasitic effects. This demonstrates the importance of post-layout verification before integrating the analog macro into a mixed-signal design flow.
+During synthesis,OpenLane cannot read AMUX2_3V.mag or AMUX2_3V.lef. It only understands Verilog.So AMUX2_3V.v acts as the black-box declaration.
+![image alt](https://github.com/praharshapm/vsdmixedsignalflow/blob/master/images/amux.JPG)
 
----
+```text
+# Complete picture
+Analog Design
+------------------------
+AMUX2_3V.mag
+        │
+        ├──► LEF
+        ├──► LIB
+        └──► Verilog Wrapper
 
-## Summary
+Digital Design
+------------------------
+raven-picorv32
+        │
+        └── design_mux.v
+              │
+              └── instantiates AMUX2_3V
 
-During this study, the following concepts were explored:
+OpenLane
+------------------------
+Synthesis  ← uses Verilog
+Floorplan  ← uses LEF
+Placement  ← uses LEF
+Timing     ← uses LIB
+Routing
+GDSII
+```
+### Analyzing generated LEF file
 
-* Understanding Analog Macros and IP reuse
-* Cloning and exploring the analog macro repository
-* Installing and using ngspice
-* Understanding transistor-level SPICE netlists
-* Running pre-layout simulations
-* Exploring the Magic layout (.mag)
-* Understanding layout extraction
-* Running post-layout simulations
-* Comparing pre-layout and post-layout waveforms
-* Learning the complete analog macro verification flow prior to OpenLane integration
+The lef file ![found here]() is matched with verilog wrapper ![found here]. But in given reference repo there was a pin issue.
 
+#### what is a "pin issue"?
+- When an analog macro is used inside OpenLane/OpenROAD, the digital tools cannot read a Magic layout (.mag). Instead, they read the LEF file which tells What is the size of the macro?, Where are the pins?, Which pins are input/output/power?, Where routing is allowed or blocked? Therefore, every pin in the layout must be exported correctly into the LEF. But before Pins were not declared as Magic ports, magic had a label. To convert the labels into pins, a command called port can be used in magic.
 
-- **Utilization Factor:** Utilization factor tells how much chip core area is occupied by standard cells. Helps decide free space available for routing. Very    high utilization causes congestion and routing problems and Very low utilization wastes chip area.Typical value: 50% – 70%.
-                         **Utilisation Factor** = (Area occupied by Netlist) / (Total Core Area) 
+##### Resolving pin issue for the labels on metal layers:
+- Select the area under which the label is present. 
 
-- **Aspect Ratio:** Aspect ratio is the ratio of core height to core width.Decides overall chip/core shape, Affects routing efficiency and placement quality. Aspect ratio `1` means square core. Non-square shapes may help some designs fit better(we can add buffer here).
-                         **Aspect Ratio** = Height / Width of the core
+<img align="center" width="500"  src="/images/vdd_select.png">
 
-Below flow describes the process of defining width and height of core and Die.**Netlist:** Describes connectivity of Electronics design.
-![image alt](https://github.com/Neha856/SoC_Design/blob/9dd8145eef251e98c548bc957f00279636ead7d0/Presentation1.png)
+- In the tkcon window type 
+  ```tcl 
+  port make
+  ```
+- To verify if the port is made 
+    ```javascript 
+    port name
+    ```
+ <img align="center" width="500"  src="/images/port.png">   
 
-## Lec2 : Concept of pre-placed cells
-Pre-placed cells are fixed cells/IP or macros(Memory block, clk gating cell, comparator, MUX, power managment block) whose locations are decided before automatic placement and routing starts.The placer cannot move these cells during placement. The benifit is that it is implemented once and can be instantiate multiple times during floorplanning.
-
-## Lec3 : De-coupling capacitors
-- **Wire Loss:** Wire loss means power or signal degradation occurring in interconnect wires because wires have resistance and capacitance.
-- **Switcing current:** Switching current is the transient current drawn when transistors change state (`0→1` or `1→0`). During switching many gates draw sudden current from power supply and creates voltage fluctuations and noise.
-- **Noise Margin Range:** Noise margin tells, the maximum unwanted noise voltage a digital circuit can tolerate without changing logic. Higher noise margin means better reliability and less chance of logic error due to noise.
-                  **NM(Noise margin) = (NM_H - NM_L)**
-- **Disadvantage of Large Distance from Main Power Supply:** If a block is far from power source then the power wire resistance increases, IR drop increases, switching noise becomes larger, timing failures may occur and also create delay, wrong logic at output.
-- **How Decoupling Capacitor Solves This:** Decoupling capacitor (decap) acts like a local temporary charge storage near the circuit block. When sudden switching current is needed decap quickly supplies current locally, reduces voltage drop, stabilizes VDD/GND and reduces noise and power fluctuations.So decaps improves power integrity, noise stability and reliable switching.
-
-  ![image alt](https://github.com/Neha856/SoC_Design/blob/d0b88032899513d1fc604aef97ccb5c3fe99dd60/Presentation2.png)
+- Similarly, carry out the same process for other labels.
   
-
-## Lec4 :  Power planning
-Till now we have resolved current demand of each elements/ckt within the block using de-cap. Now suppose same blocks(IP/Macro) is used multiple times in a chip and want to receive signal from Driver to Load Macro. Suppose one power supply is given to all. here its not possible to fit decoupling capacitor all over the chip, Multiple VDD and VSS rails are distributed in both metal layers so that every standard cell has a nearby power tap, minimising IR drop and electromigration risk.
-![image alt](https://github.com/Neha856/SoC_Design/blob/3086b73b955b8a8a5d1c0285dad780b89d495485/Presentation3.png)
-
-
-## Lec5 : Pin placement and logical cell placement blockage
-![image alt](https://github.com/Neha856/SoC_Design/blob/e93f9c7cd6738ce9dda5c236055ec289f5a67b7f/Presentation5.png)
-
-
-## Lec6(LAB) :  Steps to run floorplan using OpenLANE
-### Floorplan and Switches 
-**Floorplanning** is the stage in ASIC design where the chip/core layout structure is decided before placement. It defines core size, macro locations, IO pin locations, power distribution, routing space.Standard cells are **not placed** during floorplan. Good floorplan reduces congestion, delay, and power issues.
-
-**Switches** Here “switches” means OpenLane configuration variables/options that `control flow behavior` during synthesis, floorplan, placement, CTS, routing, etc and passed during runtime. Example: Change synthesis optimization strategy.
-
-```tcl 
-set ::env(SYNTH_STRATEGY) "DELAY 1"
+##### Resolving pin issue for the labels on polysilicon layers:
+- Type `g` to enable the grid option
+- delete the label on `poly` layer by selecting the area where label is present and typing the following in tkcon window
+   ```javascript 
+  erase labels
+  ```
+- Connect a `polycont` layer on the `poly` on one side
+- To the `polycont`, connect a `locali` layer . 
+- Remove DRC errors if any.
+- Create a label on `locali` layer , by selecting a point on the layer and in tkcon window, typing
+  ```javascript 
+  label 'name_of_label'
+  ```
+- Continue the same process for turning a label into port for rest.
+- Now, dump out the LEF file again by using 
+```javascript 
+lef write AMUX2_3V.lef
 ```
-Examples of some switches are below 
+All the pins and their descriptions can now be seen.
 
-   - **Synthesis Switches:** These control RTL → gate-level conversion. Examples
-
+#### what is a OBS?
+At the end of LEF, we have obs section Meaning OBS = Obstruction. It tells the router **Do NOT route wires through this region**. These are portions of the layout already occupied by transistors, diffusion, polysilicon, contacts, etc.
 ```text
-  SYNTH_STRATEGY → optimize for area or delay
-  SYNTH_BUFFERING → enable buffer insertion
-  SYNTH_SIZING → resize cells for timing
-  SYNTH_MAX_FANOUT → limit number of loads on output.
+OBS
+   LAYER li1 ;
+      RECT ...
+      RECT ...
+      RECT ...
+END
+```
+##### Why does the repo mention polysilicon?
+
+During LEF generation, Magic converts layout geometry into: Pins (PIN) and Obstructions (OBS). If a polysilicon label is not converted into a port correctly, Magic may incorrectly treat it as an obstruction instead of a pin.So the repo says If OBS is missing, something likely went wrong during LEF generation.
+
+#### What is CLASS CORE issue?
+
+Our LEF contains CLASS CORE Meaning: This macro is intended to be placed inside the core area of the chip. Other possible classes include `CLASS BLOCK`  , `CLASS PAD` , `CLASS RING`. For our analog multiplexer `CORE` is correct because it is used inside the digital design. This line can be added using the following command in the tkcon window:
+```javascript 
+ property LEFclass CORE
 ```
 
-   - **Floorplanning Switches:** These control chip size and macro arrangement. Examples:
+#### What is ORIGIN 0 0
 
+Our LEF says `ORIGIN 0.000 0.000` .This means the lower-left corner of the layout starts at (0,0). OpenLane assumes every macro begins at the origin. Suppose our layout actually starts at (4.5 , 2.1) Then every pin coordinate becomes shifted. Example Instead of I0 = (2,3) ,OpenLane would think I0=(6.5,5.1) from this Routing becomes incorrect.Therefore the layout is moved so that Lower Left = (0,0)
+
+##### In order to get this: 
+- **1. first find out the current co-ordinates of origin by:** selecting the whole layout and type the following in tkcon window
+```javascript 
+box
+```
+From this, llx and lly are X and Y co-ordinates respectively.
+
+- **2. setting X co-ordinate to 0:**
+```javascript 
+move origin right 'llx' um
+```
+- **3. setting Y co-ordinate to 0:**
+```javascript 
+move origin bottom -`lly`um
+```
+- **4. checking if the origin has shifted to (0,0):** first find out the current co-ordinates of origin by:
+```javascript 
+box
+```
+Now, the llx and lly should have the value of 0.
+
+####  SITE unithddbl
+
+Our LEF contains `SITE unithddbl` Meaning The macro is compatible with the standard cell rows used by the SKY130 HD library. Every standard cell has a fixed height. If our macro height doesn't match, it cannot sit inside the placement rows.To set this, type the following from tkcon window:
+```javascript 
+ property LEFsite unithddbl
+```
+#### SIZE
+
+Our LEF SIZE 8.740 BY 5.440 meaning Width = 8.74 µm and Height = 5.44 µm. The repo says Height should be 2.72 µm or 5.44 µm. Why? Because SKY130 standard-cell rows have fixed heights. For example Standard Cell Height = 2.72 µm.If your macro is 5.44 µm = 2 × 2.72 then it fits exactly into two placement rows. Otherwise OpenLane cannot place it correctly.This can be achieved by fixing a bounding box of 5.44 um.
+```javascript 
+property FIXED_BBOX {0 24 874 568}
+```
+
+#### DIRECTION
+
+Our LEF contains PIN I0 DIRECTION INPUT Meaning Signal enters macro. Similarly PIN out DIRECTION OUTPUT meaning Signal leaves macro. Power pins PIN VDD DIRECTION INOUT because Power is shared throughout the chip. Select the part which contains the pin and type the following in tkcon window:
+- **1. For Power and Ground pins:**
+```javascript 
+port class inout
+```
+- **2. For Input pins:**
+```javascript 
+port class input
+```
+- **3. For Output pins:**
+```javascript 
+port class output
+```
+
+#### USE
+
+Our LEF contains USE SIGNAL or USE POWER or USE GROUND Meaning The router now knows I0 -> Signal, VDD -> Power Rail
+and VSS -> Ground Rail. Without this information, the power distribution network (PDN) generation would fail. Select the part which contains the pin and type the following in tkcon window:
+- **1. Power pin:**
+```javascript 
+port use power
+```
+- **2. Ground pin:**
+```javascript 
+port use ground
+```
+- **3. Other pins:**
+```javascript 
+port use signal
+```
+#### property FIXED_BBOX
+property FIXED_BBOX {0 24 874 568}. This fixes the macro boundary. Think of it as drawing a rectangle around the macro. OpenLane only sees this rectangle. Everything must lie inside it.
 ```text
- FP_CORE_UTIL → utilization percentage
- FP_ASPECT_RATIO → height/width ratio
- FP_IO_MODE → IO pin placement style
- FP_PDN_ENABLE_RAILS → enable power rails.
++-------------------------+
+|                         |
+|      Entire Macro       |
+|                         |
++-------------------------+
 ```
 
- ![image alt](https://github.com/Neha856/SoC_Design/blob/44d235590b7c24bf5e76309c9a7c71b7a024b999/Presentation7.png)
- 
-#### Running Floorplan
-
-```text
-run_floorplan
+ Ultimately, after configuring all the lines for LEF, create a LEF file by typing the following in tkcon window:
+```javascript 
+lef write AMUX2_3V.lef
 ```
+### Writing LIB file
+During synthesis, OpenLane uses Yosys, which needs timing information. The LEF only tells: Macro size, Pin locations and Routing information. It does not tell: Delay, Timing and Logic function. That's why we need a `.lib file`. 
+#### Why use a Perl script?
+ LIB file can be got by using a perl script, which converts verilog file to LIB file. To view the script, go to `vim verilog_to_lib.pl`.
+ #### Why change the pin names?
+ The verilog file is obtained from the efabless github page. But, the names of the pins defined in the verilog file and the layout and LEF file obtained above may be different beacuse OpenLane would think these are different signals and fail to connect the macro. Therefore, change the pin names in the verilog file accordingly and then obtain the LIB file by using the perl script by typing the following on terminal
 
-
-## Lec6(LAB) :  Review floorplan files and steps to view floorplan
-
-After running floorplan, we can inspect the DEF file that was generated:
-
-```bash
-cd ~/Desktop/OpenLane/designs/picorv32a/runs/RUN_2026.05.16_16.07.42/results/floorplan
-less picorv32a.def
+```javascript 
+perl verilog_to_lib.pl AMUX2_3V AMUX2_3V
 ```
-## Lec(LAB)8 - Review floorplan layout in Magic
-
-```bash
-magic -T /home/vscode/.ciel/sky130A/libs.tech/magic/sky130A.tech
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/df47d583fb0983e2d047984941e9ab3a311ca7b8/Presentation6.png)
-
-After that opening vnc website port and writing below command in tkcon window.
-```tcl
-lef read ../../tmp/merged.nom.lef
-def read picorv32a.def
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/df47d583fb0983e2d047984941e9ab3a311ca7b8/Screenshot%202026-05-17%20213321.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/df47d583fb0983e2d047984941e9ab3a311ca7b8/Screenshot%202026-05-17%20213706.png)
+The Analog macro is now ready.
 
 
-# Section 2 - Library Binding and Placement
-## Lec1 : Netlist binding and initial place design
-
-* **Netlist binding** means mapping logical gates in RTL/netlist to real physical standard cells and these physical standard cells are usually rectangular for easy placement and routing in rows.
-* A **library** is a collection of pre-designed cells like AND, OR, DFF, buffers, etc. Library contains timing, power, layout, and pin information of each cell.
-* Same **logic cell** can exist in multiple sizes/drive strengths such as `and2_1`, `and2_2`, `and2_4`. Bigger cells use larger transistors, giving lower resistance hence faster switching, but they consume more area and power.
-* Once we have given proper sizes and shapes to each and every gates , the **next step** is to take those cells and placed on the floorplan.
-  ![image alt](https://github.com/Neha856/SoC_Design/blob/9506486c2096b6b7aaf9cf6c34535bd3d6e688fa/Presentation8.png)
-
-## Lec2 : Optimize placement using estimated wire-length and capacitance
-
-Before routing **Placement** is optimized using estimated wire length and capacitance to reduce delay and maintain signal integrity. Long interconnects weaken signals and increase RC delay. Buffers/repeaters are inserted between long paths to restore and strengthen signals step-by-step. This improves timing and signal quality but increases chip area and power consumption.
-
-## Lec3 : Final placement optimization
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/b2c479c123c9fa84972b28d0b20e4679c9570ef6/Presentation9.png)
-
-
-## Lec4 : Need for libraries and characterization
-
-* After synthesis, floorplanning, and placement, libraries are needed to provide accurate timing, power, and noise information of standard cells for STA and optimization. **A standard cell library** is a collection of pre-designed logic cells containing layout, timing, power, and functional information used during ASIC design.
-* **Power characterization** measures how much dynamic and leakage power each cell consumes under different conditions. **Noise characterization** analyzes how cells behave under signal noise/crosstalk to ensure reliable logic operation and proper noise margins.
-* **NLDM (Non-Linear Delay Model)** stores delay and transition values in lookup tables based on input slew and output load capacitance.
-* **CCS (Composite Current Source)** is an advanced timing/power/noise model that represents real current behavior of cells more accurately than NLDM for high-speed designs.
-
-
-## Lec5 : Congestion aware placement using RePlAce
-
-### Legalization and Types of Placement 
-
-Legalization is the process of adjusting placed standard cells into valid rows/sites without overlaps after global placement. It ensures all cells follow placement rules while keeping displacement and timing impact as small as possible.Types of placement are 
-
-* **Global Placement** → Cells are placed approximately in the chip area to minimize wire length and congestion without exact legal positions.
-* **Detailed Placement** → Cells are moved to exact legal rows/sites while fixing overlaps and improving placement quality.
-* **Timing-Driven Placement** → Placement is optimized mainly to improve timing and reduce critical path delay.
-* **Congestion-Driven Placement** → Cells are arranged to reduce routing congestion and improve routability.
-
-### Running Placement
-
-```tcl
-run_placement
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/df47d583fb0983e2d047984941e9ab3a311ca7b8/Screenshot%202026-05-17%20221445.png)
-
-After this completes, we can inspect the DEF file that was generated:
-
-```bash
-cd ~/Desktop/OpenLane/designs/picorv32a/runs/RUN_2026.05.17_16.30.19/results/placement
-less picorv32a.def
-```
-
-#### Viewing the placement in Magic
-```bash
-magic -T /home/vscode/.ciel/sky130A/libs.tech/magic/sky130A.tech
-```
-After that opening vnc website port and writing below command in tkcon window.
-```tcl
-lef read ../../tmp/merged.nom.lef
-def read picorv32a.def
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/df47d583fb0983e2d047984941e9ab3a311ca7b8/Screenshot%202026-05-17%20221751.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/df47d583fb0983e2d047984941e9ab3a311ca7b8/Screenshot%202026-05-17%20222200.png)
-
-
-# Section 3 - Cell design and characterization flows 
-## Lec1 : Inputs for cell design flow
-
-After routing the chip successfully, let us see the cell design flow. **Cell design flow** is the process of creating and validating a standard cell from transistor-level design to final characterized library cell. The main inputs required for cell design are PDK files, DRC and LVS design rules, SPICE models, technology files, and design specifications. Using these inputs, the designer creates schematic, layout, performs verification, parasitic extraction, and finally characterizes the cell for timing, power, and noise analysis.
-
-## Lec2,3,4 : Circuit design step, Layout design steps and Typical characterization flow
-
-- **User-defined** specifications are design requirements decided before creating a standard cell, such as gate length, cell height, supply voltage, metal layers, pin locations, drive strength, and timing targets. These specifications ensure all cells follow a uniform architecture and are compatible with placement and routing. The ouput getting CDL(circuit description language).
-- **The library developer’s responsibility** is to design and optimize the cells according to these specifications, perform DRC/LVS verification, extract parasitics, and characterize timing, power, and noise so the cells can be reliably used in ASIC design flow.The ouput is GDS||, LEF, .cir(extracted spice netlist)
-- After defining the specifications, we go through the main **cell design steps** which **include** `circuit/schematic design`(In order to get required current or delay specification), `physical layout design`(Stick diagram using Eular path), and `characterization`. In schematic design, transistor-level functionality is created and verified. Then the layout is designed following DRC/LVS rules, and finally characterization is performed to generate timing, power, and noise models for library usage. The ouput getting timing, noise , poer (.lib), function.
-
-
-# Section 4 - General timing characterization parameters
-## Lec1 : Timing threshold definitions
-Timing threshold definitions specify the voltage percentages used to measure signal transition (slew) and delay during characterization. Example terms:
-
-* `slew_lower_rise_thr` → lower voltage point for rising slew measurement (example 20% VDD)
-* `slew_upper_rise_thr` → upper voltage point for rising slew measurement (example 80% VDD)
-* `slew_lower_fall_thr` → upper voltage point for falling transition start (example 80% VDD)
-* `slew_upper_fall_thr` → lower voltage point for falling transition end (example 20% VDD)
-* `input_threshold_fall` → voltage point where falling input delay measurement is taken (usually 50% VDD).
-
-## Lec2 : Propagation delay and transition time
-* **Propagation Delay:** is the time taken for a change at the input of a gate/cell to appear at the output. Usually measured between 50% input voltage point and 50% output voltage point.Example input crosses 0.9V at 2ns and output crosses 0.9V at 3ns then the propagation delay = 1ns.
-
-* **Transition Time (Slew)** is the time taken for a signal to change from LOW→HIGH or HIGH→LOW. Usually measured rising slew → 20% to 80% VDD, falling slew → 80% to 20% VDD. Smaller transition time means faster switching and better timing performance.
 
 </details>
 
 <details> 
-	<summary> DAY 3 -  Design library cell using Magic Layout and ngspice characterization </summary>
+	<summary> WEEK 3 -  Use that analog macro inside a complete digital chip TASK 3 </summary>
 
-# Section 1 - Labs for CMOS inverter ngspice simulations
-## Lec0 : IO placer revision
-
-* IO placement is the process of arranging input and output pins around the chip boundary during floorplanning. It helps reduce routing congestion and improves connectivity between external pins and internal logic.
-* We changed the floorplan switch `FP_IO_MODE` from `1` to `2` to observe different IO pin arrangements. Initially, the older Docker/OpenLane setup produced errors during floorplanning, so a newer Docker container was pulled and used successfully. After loading the generated DEF file in Magic, we analyzed the floorplan and observed that with `FP_IO_MODE=2`, the IO pins appeared more closely packed and distributed differently around the chip boundary.
-
- ![image alt](https://github.com/Neha856/SoC_Design/blob/141aa6ba51ac45077d33e8532ef9f658960bf0b9/Presentation10.png)
-
+# Section 1 - Asking OpenLane to build an entire chip that contains this analog macro
+## Learning : Experiments with Openlane and sky130 
+### Building Top chip
+OpenLane organizes every chip as one design thats why need a folder. Inside it, everything related to this chip will be stored.
 ```bash
-cd ~/Desktop/OpenLane
-docker pull ghcr.io/the-openroad-project/openlane:latest
-docker run --rm -it \
--v /home/vscode/Desktop/OpenLane:/openlane \
--v /home/vscode/.ciel:/home/vscode/.ciel \
--e PDK_ROOT=/home/vscode/.ciel \
--e PDK=sky130A \
--e STD_CELL_LIBRARY=sky130_fd_sc_hd \
--e DISPLAY=:1 \
--v /tmp/.X11-unix:/tmp/.X11-unix \
-ghcr.io/the-openroad-project/openlane:latest
+cd designs
+mkdir design_mux
 ```
-* We do NOT need `make mount` now. Because we already manually started the Docker container using: "docker run......latest"".
+### Export PDK(Process design kit)
+It contains Technology rules, Standard cells,DRC rules, Layers, Via definitions, Models and Libraries. OpenLane must know Where is SKY130? That's why To set-up the project, run the following :
+Go to the `~/openlane_working_dir/openlane` and execute the following:
+```javascript 
+export PDK_ROOT=<absolute path to where skywater-pdk and open_pdks reside>
+```
+### Running docker and preparing the project
+```javascript 
+docker run -it -v $(pwd):/openLANE_flow -v $PDK_ROOT:$PDK_ROOT -e PDK_ROOT=$PDK_ROOT -u $(id -u $USER):$(id -g $USER) openlane:rc2
+```
+This starts the OpenLane environment.Inside Docker you now have Yosys,  OpenROAD, Magic, Netgen, KLayout, TritonRoute, FastRoute Everything is ready.
+```javascript 
+ ./flow.tcl -design design_mux -init_design_config
+```
+This command does not run synthesis. It only prepares the project. OpenLane creates something like The important file is config.tcl 
+```text
+design_mux/
+config.tcl
+src/
+runs/
+...
+```
+#### Why do we need config.tcl?
+OpenLane doesn't know Top module name Clock, RTL file, Macro LEF, Macro LIB, Macro placement. All this information is stored inside `config.tcl` Think of it as Project Settings from here the real RTL to GDS flow starts.
+
+## Learning 2 : Adding Input Files
+### Ading Verilog files?
+
+`design_mux.v`. This is the **top-level design**. It instantiates everything. Without it, OpenLane does not know what circuit to build. Think of it as the entire chip. Example:
+
+```text
+design_mux
+│
+├── SPI Interface
+├── Control Logic
+├── AMUX2_3V
+└── Other logic
+```
+
+* **AMUX2_3V.v** This is **our analog macro wrapper**. Remember It is **not synthesized**.It only tells synthesis
+* **raven_spi.v** Implements the SPI controller. The chip communicates with the outside world through SPI.
+* **spi_slave.v** Implements the SPI slave logic. 
+
+### Adding LEF
+Copy `AMUX2_3V.lef` into `design_mux/src/lef/` **Why?** During placement, OpenLane must know  Macro size, Pin locations, Blockages. This information comes from LEF.
+
+# Section 2 - Interactive Flow from RTL to GDS
+## Learning 1 : Process of RTL to GDS   
+### Interactive Flow
+To harden a macro, the automated flow for Openlane cannot by used. Instead an interactive script should be used. 
+
+Go to the `~/openlane_working_dir/openlane` and execute the following:
+```javascript 
+export PDK_ROOT=<absolute path to where skywater-pdk and open_pdks reside>
+```
+```javascript 
+docker run -it -v $(pwd):/openLANE_flow -v $PDK_ROOT:$PDK_ROOT -e PDK_ROOT=$PDK_ROOT -u $(id -u $USER):$(id -g $USER) openlane:rc2
+```
+A bash window will open. In the bash window, the interactive flow is executed.
+```javascript 
+ ./flow.tcl -design design_mux -interactive
+```
+
+
+### Loading OpenLane package
 
 ```tcl
-./flow.tcl -interactive
-package require openlane
-prep -design picorv32a
+package require openlane 0.9
+```
+This loads all OpenLane commands. Without it commands would not exist.
+
+### Preparing the design
+
+```tcl
+prep -design design_mux -overwrite
+```
+This command does several things Reads `config.tcl` Creates a new run directory, Loads the PDK, Loads technology files, Creates working directories, Initializes the design database
+
+
+### Loading the LEF
+
+```tcl
+set lefs [glob $::env(DESIGN_DIR)/src/lef/*.lef]
+```
+Meaning Search `design_mux/src/lef/` for every `*.lef` file. If there are any lef file all will be collected.
+
+### Registering the LEF
+
+```tcl
+add_lefs -src $lefs
+```
+This tells OpenLane "These are my hard macros." Without this command, during floorplanning, OpenLane would say `Cannot find macro`. because it has no physical information.
+
+## Learning 2 : Logic Design
+### Running synthesis
+
+```tcl
 run_synthesis
-set ::env(FP_IO_MODE) 2
-run_floorplan
 ```
-```bash
-cd ~/Desktop/OpenLane/designs/picorv32a/runs/RUN_2026.05.19_09.30.10/results/floorplan
-magic -T /home/vscode/.ciel/sky130A/libs.tech/magic/sky130A.tech
+This is the **first actual implementation step**. Yosys reads `design_mux.v` and starts synthesizing. Yosys is an open‑source synthesis tool that converts Verilog RTL designs into gate‑level netlists. In simple words, it takes your high‑level hardware description and maps it onto logic gates from a standard cell library, making the design ready for place‑and‑route.
+
+#### What about AMUX2_3V?
+This is important. Yosys **does not synthesize** it. Instead, it sees
+
+```verilog
+AMUX2_3V mux1(...)
 ```
-```tkcon
-lef read ../../tmp/merged.nom.lef
-def read picorv32a.def
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/141aa6ba51ac45077d33e8532ef9f658960bf0b9/Presentation11.png)
-
-## Lec1&2 :  SPICE deck creation for CMOS inverter
-
-- **What is a SPICE Deck?**  A SPICE deck is a text file that describes an electronic circuit for simulation in tools like: ngspice,LTspice. It contains: transistors, resistors, capacitors, voltage sources and simulation commands.
-- **Why NMOS and PMOS substrate/body connection is required** We connect NMOS body to GND(VSS) and PMOS body to VDD to prevent -
-   - **1.Body effect:** Threshold voltage changes if: VSB ≠ 0.This changes transistor behavior.V
-   - **2.Prevents Unwanted Diode Conduction:** Inside MOSFET there are parasitic PN junction diodes. Wrong body connection can forward bias diode cause current           flow which damage logic behavior.
-   - **3.Prevents Latch-Up:** In CMOS NMOS and PMOS create parasitic bipolar transistors, improper substrate/well bias may trigger latch-up this can cause huge           current and chip failure.
-![image alt](https://github.com/Neha856/SoC_Design/blob/c99b84dea43c5bcdde58f5270e9cc7bbefa6b7f0/Screenshot%202026-05-21%20140057.png)
+and says "This is already an existing hard macro." It keeps it as a black box. We'll obtain `results/synthesis/`
+containing design_mux.synthesis.v, Reports, Statistics, Timing.
 
 
+### What is Floorplanning?
 
-## Lec3 :  Switching Threshold Vm
+This is where OpenLane decides "Where should every block be placed?" At this stage The chip size is determined, Power rails are planned, The analog macro (`AMUX2_3V`) is allocated space and Standard-cell rows are created around it. No routing has happened yet—OpenLane is only deciding **where everything will physically sit** on the chip.This marks the transition from **logical design (RTL and synthesis)** to **physical design (floorplanning, placement, CTS, routing)**, where our analog macro is treated as a fixed hard block and the rest of the digital logic is arranged around it. After floorplanning, the layout can be viewed in magic using the merged LEF and DEF file produced. The DEF file.
 
-**Switching Threshold** is voltage where CMOS inverter switches state. At switching threshold Vin = Vout. Both NMOS and PMOS are ON near this point. Also called trip point, inverter threshold voltage and switching point. For robust CMOS design Vm = Vdd/2.  Switching Threshold is Important for
-
- - **1. Better Noise Margin:**  It Improves immunity against noise, Prevents wrong logic detection and Gives stable logic HIGH and LOW.
- - **2. Prevents False Switching:** Noise will not easily change logic state that why Circuit becomes more reliable.
- - **3. Balanced Rise and Fall Delay:** Output transitions become symmetric. Improves timing performance.
- - **4. Reduces Short-Circuit Power:** Minimizes simultaneous NMOS and PMOS conduction. Reduces power dissipation.
- - **5. Improves Robustness:** Circuit works reliably under: voltage variation, temperature variation, noise and process variation.
-
-
-**Switching Threshold is Controlled** Mainly by transistor sizing (W/L) ratio. Practical Fact is that Electron mobility `μn > μp`. NMOS is naturally stronger than PMOS. So PMOS width has to be increased. Generally `Wp ≈ (2–3times) × Wn` which helps shift threshold near mid-supply.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/483dd3b9b4ca77373e3caf1c2a8973d93fc39f54/Presentation12.png)
-
-## Lec4 :  Static and dynamic simulation of CMOS inverter
-
-* Static behaviour of CMOS inverter is analyzed using Voltage Transfer Characteristics (VTC). It shows the relation between input voltage and output voltage and helps determine switching threshold and noise margin.
-* Dynamic behaviour studies how the inverter responds with time during switching. It includes rise time, fall time, propagation delay, and charging/discharging of load capacitance.
-* Static analysis focuses on stable logic states, while dynamic analysis focuses on switching speed and transient performance.
-
-## Lec4 :  Lab steps to git clone vsdstdcelldesign
-
-Clone custom inverter standard cell design from github repository: [Standard cell design and characterization using OpenLANE flow](https://github.com/nickson-jose/vsdstdcelldesign).
-
-```bash
-# Change directory to openlane
-cd ~/Desktop/openlane
-
-# Clone the repository with custom inverter design
-git clone https://github.com/nickson-jose/vsdstdcelldesign
-
-# To come back my first docker container
-make mount
-
-# Change into repository directory
-cd vsdstdcelldesign
-
-# To find directory of sky130A.tech file
-find /home/vscode/ .ciel -name "sky130A. tech"
-
-# Copy magic tech file to the repo directory for easy access
- cp /home/vscode/.ciel/ciel/sky130/versions/0fe599b2afb6708d281543108caf8310912f54af/sky130A/libs.tech/magic/sky130A.tech .
-
-# Check contents whether everything is present
-ls
-
-# Command to open custom inverter layout in magic
-magic -T sky130A.tech sky130_inv.mag &
+```javascript 
+magic -T ~/sky130A.tech lef read ~/merged.lef def read design_mux.floorplan.def
 ```
 
-# Section 2 - Inception of Layout – CMOS fabrication process
-## Lec1to7 : CMOS febrication process
-
-### 16-Mask CMOS Fabrication Process
-
-**1. Selecting Substrate** Fabrication starts with a silicon wafer substrate. Usually a lightly doped P-type substrate is used for CMOS fabrication.  It acts as the base material for building transistors and interconnections.
-
-**2. Creating Active Region (Mask 1)** Active regions are defined using oxidation and lithography. These regions specify where transistors will be formed. Field oxide isolates one device from another.
-
-**3. N-Well and P-Well Formation** N-well is created for PMOS transistors and P-well for NMOS transistors. Ion implantation and diffusion processes are used. Wells help provide proper body connection and isolation.
-
-**4. Formation of Gate and Gate Regions** Thin gate oxide is grown over silicon surface. Polysilicon is deposited and patterned to form gates. Gate controls current flow between source and drain.
-
-**5. Lightly Doped Drain (LDD) Formation** Light doping is introduced near source/drain edges. LDD reduces hot-electron effects and electric field peaks. It improves device reliability and performance.
-
-**6. Source and Drain Formation** Heavy doping is performed to create source and drain terminals. NMOS uses N+ doping and PMOS uses P+ doping. These regions allow current conduction in transistors.
-
-**7. Contact and Interconnect Formation** Contact holes are opened through insulating oxide layers. Metal contacts connect transistors to routing layers. Interconnects enable signal and power connections.
-
-**8. Higher-Level Metal Formation** Multiple metal layers are formed for complex routing. Vias connect different metal layers vertically. Higher metal layers reduce routing congestion and resistance.
+![image alt]()
 
 
-![image alt](https://github.com/Neha856/SoC_Design/blob/d9e2652fc81cf62761a51ddb7082dda8bf1884bd/fLvKx6JAIcLEqST69dvGgISS_FgibgkDVNNacmob7CvB3hrqdP2t2d-J5rca-e2NwgUqlEf6CBTj9OnhWaz4L77zN-cJ-GzIQ-cx8-6NF2E8EKSdcBd4V3KzGqQXvHk1OuLJ-IOXST0KjoDZ6Cw2EbGN1AVm_UMTS6BFwyYgXjgBZtatYx71_NAZfvJyCJ0e.jpg)
-
-## Lec8 : Lab introduction to Sky130 basic layers layout and LEF using inverter
-Using Vnc_lite.html website we have open custom layout of Cmos inverter in magic And NMOS and PMOS identified.
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/1fbe45e4e0fec992417a0bd3166605037787370e/Screenshot%202026-05-19%20190039.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/1fbe45e4e0fec992417a0bd3166605037787370e/Screenshot%202026-05-19%20191037.png)
-Verified the output Y connectivity to PMOS and NMOS drain 
-![image alt](https://github.com/Neha856/SoC_Design/blob/1fbe45e4e0fec992417a0bd3166605037787370e/Screenshot%202026-05-19%20191439.png)
-
-
-## Lec8 : Lab steps to create std cell layout and extract spice netlist
-
-- Deleting necessary layout part to see DRC error
-![image alt](https://github.com/Neha856/SoC_Design/blob/1fbe45e4e0fec992417a0bd3166605037787370e/Screenshot%202026-05-19%20192625.png)
-- Commands for spice extraction of the custom inverter layout to be used in tkcon window of magic
+## Learning 3 : Physical Design
+### IO Placement
 
 ```tcl
-# Check current directory
-pwd
-
-# Extraction command to extract to .ext format
-extract all
-
-# Before converting ext to spice this command enable the parasitic extraction also
-ext2spice cthresh 0 rthresh 0
-
-# Converting to ext to spice
-ext2spice
+place_io
 ```
-![image alt](https://github.com/Neha856/SoC_Design/blob/1fbe45e4e0fec992417a0bd3166605037787370e/Screenshot%202026-05-19%20205750.png)
+This places the **I/O pins of the top-level design** around the boundary of the chip. These are **top-level chip pins**, **not** the pins of the AMUX macro.
+
+#### Global Placement
+
+```tcl
+global_placement_or
+```
+**Purpose** is that OpenROAD decides approximately where every standard cell should go. Imagine we have `1000 standard cells` .Initially everything is overlapping.
+
+```
+□□□□□□□□□□□□□□□□□□□□□□
+```
+Global placement spreads them out.
+
+```
+□ □ □ □ □ □ □
+   □ □ □ □
+□ □ □ □ □ □
+```
+
+No exact locations yet. The analog macro (AMUX2_3V) is **fixed**. Only digital cells move.
+
+#### Detailed Placement
+
+```tcl
+detailed_placement
+```
+Now every cell is  sits exactly on legal placement rows. For example Before
+
+```
+□
+    □
+       □
+```
+
+After
+
+```
+□□□□□□□□□□□□
+□□□□□□□□□□□□
+□□□□□□□□□□□□
+```
+
+#### Tap and Decap Insertion
+
+```tcl
+tap_decap_or
+```
+
+This inserts Tap Cells. Tap cells connect **P-substrate <-> N-well** to **VSS <-> VDD** This prevents Latch-up and Floating wells
+
+#### Decap Cells
+
+Decoupling capacitors reduce Power Supply Noise, Voltage Drop,Switching Noise. They stabilize the power rails. After insertion placement changes,so OpenLane again performs to legalize all cells.
+
+```tcl
+detailed_placement
+```
+After final placement, the layout can be viewed in magic using merged LEF and DEF file. 
+
+```bash
+magic -T sky130A.tech \
+lef read merged.lef \
+def read design_mux.placement.def
+```
+
+![image alt]()
+
+### PDN Generation
+
+```tcl
+gen_pdn
+```
+
+PDN means Power Delivery Network. OpenLane generates VDD Rails, VSS Rails, Metal Straps, Power Grid. For example
+
+```picture
+================== VDD
+
+||||||||||||||||||
+
+================== VSS
+```
+
+Every standard cell and the analog macro are connected to this power network. Without PDN Nothing receives power.
+
+
+### Routing
+
+```tcl
+run_routing
+```
+Now OpenROAD connects every signal. Before routing no wires are all electrically connected.After routing, the layout can be viewed in magic using merged LEF and DEF file.
+
+```bash
+magic -T sky130A.tech \
+lef read merged.lef \
+def read design_mux.def
+```
+Now the DEF contains Placement + Routing so Magic displays both cells and interconnects.
+
+![image alt]()
+
+
+# Section 3 - Post routing verification to gds file generation 
+## Learning 1 : Post routing verification and final Layout generation 
+### Post-layout DRC Cleaning
+
+```tcl
+run_magic_drc
+```
+Magic checks Minimum spacing Minimum width, Metal overlap, Via spacing, Enclosure and Technology rule violations.If violations exist, they must be fixed. opens the DRC layout so you can inspect the errors.
+ 
+ ```bash
+magic -T sky130A.tech design_mux.drc.mag
+```
+![image alt]()
+
+
+### Final Layout
+
+```tcl
+run_magic
+```
+The final layout output is in the form of `design_mux.mag`. Magic converts the routed DEF into the final layout. 
+```javascript 
+magic -T ~/sky130A.tech design_mux.mag
+```
 
 
 
-# Section 3 - Sky130 Tech File Labs 
-## Lec1 : Lab steps to create final SPICE deck using Sky130 tech
+#### Important Notes Why remove VDD/VSS from the Verilog?
 
-Screenshot of created spice file
-![image alt](https://github.com/Neha856/SoC_Design/blob/4eb714e11e0ddfae290725fd84df8307aed635e6/Screenshot%202026-05-19%20210053.png)
+The analog macro's **physical layout** already contains the power connections. If the wrapper Verilog also declares power pins in a way that conflicts with the integration flow, OpenLane may create duplicate or inconsistent connections. The repository's wrapper keeps the functional interface simple (I0, I1, `select`, `out`) while the physical power connectivity is handled by the LEF/layout and the generated PDN.
 
-Measuring unit distance in layout grid
-![image alt](https://github.com/Neha856/SoC_Design/blob/8bbe0c5c96356d998b145da4e37f0c08e059f505/Screenshot%202026-05-19%20211506.png)
+#### Why add the LEF twice?
 
-Screenshot of library model name 
-![image alt](https://github.com/Neha856/SoC_Design/blob/8bbe0c5c96356d998b145da4e37f0c08e059f505/Screenshot%202026-05-19%20214056.png)
+We saw `config.tcl + add_lefs`. This is because:
+
+* `config.tcl` tells OpenLane that the macro exists as part of the project configuration.
+* `add_lefs` loads the macro's LEF into the current interactive OpenLane session so the tools can use its physical abstract immediately.
+
+
+# Complete Mixed-Signal Flow
+
+```text
+Analog Design
+─────────────
+Schematic
+      │
+      ▼
+Layout (Magic)
+      │
+      ▼
+DRC
+      │
+      ▼
+Extraction
+      │
+      ▼
+Post-layout Simulation
+      │
+      ▼
+LEF + LIB + Verilog Wrapper
+      │
+      ▼
+Analog Macro Ready
+─────────────────────────────────────
+OpenLane Physical Design
+─────────────────────────────────────
+Create Design
+      │
+      ▼
+Synthesis
+      │
+      ▼
+Floorplan
+      │
+      ▼
+IO Placement
+      │
+      ▼
+Global Placement
+      │
+      ▼
+Detailed Placement
+      │
+      ▼
+Tap/Decap Insertion
+      │
+      ▼
+PDN Generation
+      │
+      ▼
+Routing
+      │
+      ▼
+DRC
+      │
+      ▼
+Final Layout (.mag/.gds)
+```
+
+This completes the end-to-end picture: you first create and verify an analog hard macro, then provide its LEF, LIB, and Verilog wrapper so OpenLane can integrate it with synthesized digital logic, place it on the chip, connect power and signals, verify the layout, and generate the final manufacturable design.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```text
+                    ANALOG DESIGN
+                    =============
+
+Schematic
+      │
+      ▼
+Magic Layout (.mag)
+      │
+      ▼
+DRC
+      │
+      ▼
+Extraction (.ext)
+      │
+      ▼
+Post-layout SPICE (.spice)
+      │
+      ▼
+LEF generation
+      │
+      ▼
+Verilog wrapper (.v)
+      │
+      ▼
+LIB generation (.lib)
+
+──────────────────────────────────────────────
+         Analog macro is now ready
+──────────────────────────────────────────────
+
+               DIGITAL FLOW
+               ============
+
+RTL (Top-level Verilog)
+      │
+      ▼
+Synthesis (Yosys)
+      │
+      │  Uses:
+      │  • Standard-cell LIB
+      │  • AMUX2_3V.lib
+      ▼
+Gate-level Netlist
+      │
+      ▼
+Floorplanning
+      │
+      │  Uses:
+      │  • AMUX2_3V.lef
+      ▼
+Placement
+      │
+      ▼
+Clock Tree Synthesis (if required)
+      │
+      ▼
+Routing
+      │
+      ▼
+Final GDSII
+```
+
 
 Editing the spice model file for analysis through simulation.
 ![image alt](https://github.com/Neha856/SoC_Design/blob/8bbe0c5c96356d998b145da4e37f0c08e059f505/Screenshot%202026-05-21%20154546.png)
 
-
-## Lec2 : Lab steps to characterize inverter using sky130 model files
-
-```bash
-# Running ngspice for post layout simulation
-ngspice sky130_inv.spice
-
-# plotting input and ouput with respect to time
-plot y vs time a
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/bbb49b6cf87e88988a77fd35072108e3477574c6/Screenshot%202026-05-20%20142403.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/bbb49b6cf87e88988a77fd35072108e3477574c6/Screenshot%202026-05-20%20143136.png)
-
-**Rise transition time calculation**
-
-```math
-Rise\ transition\ time = Time\ taken\ for\ output\ to\ rise\ to\ 80\% - Time\ taken\ for\ output\ to\ rise\ to\ 20\%
-```
-```math
-20\%\ of\ output = 660\ mV
-```
-```math
-80\%\ of\ output = 2.64\ V
-```
-
-![image alt](https://github.com/Neha856/SoC_Design/blob/e8fea97ed7041b58bb0668bdbfffdd8291f6cbb6/Presentation13.png)
-
-**Fall transition time calculation**
-
-```math
-Fall\ transition\ time = Time\ taken\ for\ output\ to\ fall\ to\ 20\% - Time\ taken\ for\ output\ to\ fall\ to\ 80\%
-```
-```math
-20\%\ of\ output = 660\ mV
-```
-```math
-80\%\ of\ output = 2.64\ V
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/e8fea97ed7041b58bb0668bdbfffdd8291f6cbb6/Presentation14.png)
-
-**Rise Cell Delay Calculation**
-
-```math
-Rise\ Cell\ Delay = Time\ taken\ for\ output\ to\ rise\ to\ 50\% - Time\ taken\ for\ input\ to\ fall\ to\ 50\%
-```
-```math
-50\%\ of\ 3.3\ V = 1.65\ V
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/e8fea97ed7041b58bb0668bdbfffdd8291f6cbb6/Presentation15.png)
-
-**Fall Cell Delay Calculation**
-
-```math
-Fall\ Cell\ Delay = Time\ taken\ for\ output\ to\ fall\ to\ 50\% - Time\ taken\ for\ input\ to\ rise\ to\ 50\%
-```
-```math
-50\%\ of\ 3.3\ V = 1.65\ V
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/e8fea97ed7041b58bb0668bdbfffdd8291f6cbb6/Presentation16.png)
-
-
-## Lec3 : Lab introduction to Magic tool options and DRC rules
-
-**SkyWater SKY130 PDK Periphery Rules document:** It contains all the DRC (Design Rule Check) rules used during CMOS layout design in the SkyWater Technology process. It defines important rules such as: minimum width of poly/metal, spacing between layers, diffusion and well rules,contact and via rules. These rules ensure the chip can be manufactured correctly without shorts, leakage, or fabrication defects. Layout tools like Magic VLSI use these rules during DRC checking.
-
-Link to Sky130 Periphery rules: [https://skywater-pdk.readthedocs.io/en/main/rules/periphery.html](https://skywater-pdk.readthedocs.io/en/main/rules/periphery.html)
-
-## Lec4 : Lab introduction to Sky130 pdk's and steps to download labs
-
-Commands to download and view the corrupted skywater process magic tech file and associated files to perform drc corrections
-
-```bash
-# Change to home directory
-cd
-
-# Command to download the lab files
-wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz
-
-# Since lab file is compressed command to extract it
-tar xfz drc_tests.tgz
-
-# Change directory into the lab folder
-cd drc_tests
-
-# List all files and directories present in the current directory
-ls -al
-
-# Command to view .magicrc file
-vim .magicrc
-
-# Command to open magic tool in better graphics
-magic -d XR &
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/80fadbf0eea32040de9507e7b2c55959b30408e9/Screenshot%202026-05-20%20165940.png)
-
-
-## Lec5 : Lab introduction to Magic and steps to load Sky130 tech-rules
-
-After loading met3.mag file getting 
-![image alt](https://github.com/Neha856/SoC_Design/blob/ae65ce30039f3b55b90bdb1632341242dbc1b4e2/Screenshot%202026-05-20%20171654.png)
-Checking drc of selected area
-![image alt](https://github.com/Neha856/SoC_Design/blob/53bd4035561e54124ad68c5cd6f1c3eeb7117a8c/Screenshot%202026-05-20%20172204.png)
-
-## Lec6 : Lab exercise to fix poly.9 error in Sky130 tech-file
-
-```bash
-# loading poly layer in magic layout
-load poly
-# checking poly layer
-what
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/887ab6067e59f287b2160ad3fe34d9cd50099e7d/Screenshot%202026-05-20%20173140.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/887ab6067e59f287b2160ad3fe34d9cd50099e7d/Screenshot%202026-05-20%20173243.png)
-
-Screenshot of poly rules
-![Screenshot from 2024-03-21 22-54-49](https://github.com/fayizferosh/soc-design-and-planning-nasscom-vsd/assets/63997454/9260cf37-5933-44a1-8362-597183644334)
-
-Incorrectly implemented poly.9 rule no drc violation even though spacing < 0.48u 
-![image alt](https://github.com/Neha856/SoC_Design/blob/887ab6067e59f287b2160ad3fe34d9cd50099e7d/Screenshot%202026-05-20%20173508.png)
-
-
-New commands inserted in sky130A.tech file to update drc(NOTE: One error in screenshot there is no space before uhrpoly)
-![image alt](https://github.com/Neha856/SoC_Design/blob/2cd8c5354f43908bb6b17b43063a058323b3d621/Screenshot%202026-05-20%20175451.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/2cd8c5354f43908bb6b17b43063a058323b3d621/Screenshot%202026-05-20%20175842.png)
-
-Commands to run in tkcon window
-
-```tcl
-# Loading updated tech file
-tech load sky130A.tech
-
-# Must re-run drc check to see updated drc errors
-drc check
-
-# Selecting region displaying the new errors and getting the error messages 
-drc why
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/2cd8c5354f43908bb6b17b43063a058323b3d621/Screenshot%202026-05-20%20215913.png)
-
-## lec7to9 : Lab exercise to implement poly resistor spacing to diff and tap
-
-Making copies of resistor to check diffusion 
-![image alt](https://github.com/Neha856/SoC_Design/blob/2cd8c5354f43908bb6b17b43063a058323b3d621/Screenshot%202026-05-20%20230008.png)
-
-**Incorrectly implemented difftap.2 simple rule correction** Screenshot of difftap rules are below
-![image alt](https://github.com/Neha856/SoC_Design/blob/2cd8c5354f43908bb6b17b43063a058323b3d621/Screenshot%202026-05-20%20231917.png)
-
-**Incorrectly implemented nwell.4 complex rule correction** Screenshot of nwell rules are below 
-![image alt](https://github.com/Neha856/SoC_Design/blob/58743e15a0721813c2d9f6d9048ae178fe0e05e9/Screenshot%202026-05-20%20232016.png)
-
-```bash
-load nwell.mag
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/58743e15a0721813c2d9f6d9048ae178fe0e05e9/Screenshot%202026-05-20%20235418.png)
-
-Commands to run in tkcon window
-
-```tcl
-# Loading updated tech file
-tech load sky130A.tech
-
-# Change drc style to drc full
-drc style drc(full)
-
-# Must re-run drc check to see updated drc errors
-drc check
-
-# Selecting region displaying the new errors and getting the error messages 
-drc why
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/58743e15a0721813c2d9f6d9048ae178fe0e05e9/Screenshot%202026-05-20%20235905.png)
-
-</details>
-
-<details> 
-	<summary> DAY 4 -  Pre-layout timing analysis and importance of good clock tree </summary>
-
-
-# Section 1 - Timing modelling using delay tables
-## Lec1 : Lab steps to convert grid info to track info
-
-Commands to open the custom inverter layout
-
-```bash
-# Change directory to vsdstdcelldesign
-cd Desktop/OpenLane/vsdstdcelldesign
-
-# Command to open custom inverter layout in magic
-magic -T sky130A.tech sky130_inv.mag &
-```
-Screenshot of tracks.info of sky130_fd_sc_hd
-![image alt](https://github.com/Neha856/SoC_Design/blob/d9ebcb1150467047f6619b8e2ea492b99fce8a7a/Screenshot%202026-05-21%20210030.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/d9ebcb1150467047f6619b8e2ea492b99fce8a7a/Screenshot%202026-05-21%20210016.png)
-
-
-Commands for tkcon window to set grid as tracks of locali layer
-
-```tcl
-# Get syntax for grid command
-help grid
-# Set grid values accordingly
-grid 0.46um 0.34um 0.23um 0.17um
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/d9ebcb1150467047f6619b8e2ea492b99fce8a7a/Screenshot%202026-05-21%20211117.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/d9ebcb1150467047f6619b8e2ea492b99fce8a7a/Screenshot%202026-05-21%20211318.png)
-
-Condition 1 verified
-```math
-Horizontal\ track\ pitch = 0.46\ um
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/d9ebcb1150467047f6619b8e2ea492b99fce8a7a/Screenshot%202026-05-21%20212112.png)
-
-```math
-Width\ of\ standard\ cell = 1.39\ um = 0.46 * 3
-```
-Condition 2 verified
-
-```math
-Vertical\ track\ pitch = 0.34\ um
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/d9ebcb1150467047f6619b8e2ea492b99fce8a7a/Screenshot%202026-05-21%20212408.png)
-
-```math
-Height\ of\ standard\ cell = 2.70\ um = 0.34 * 8
-```
-
-## lec2 : Lab steps to convert magic layout to std cell LEF
-Command for tkcon window to save the layout with custom name
-
-```tcl
-# Command to save as
-save sky130_vsdinv.mag
-```
-
-```bash
-# Command to open custom inverter layout in magic
-magic -T sky130A.tech sky130_vsdinv.mag &
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/4c81b0574205a66ed7c3572916f64b44564fd3e3/Screenshot%202026-05-22%20213947.png)
-
-```tcl
-# lef command
-lef write
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/4c81b0574205a66ed7c3572916f64b44564fd3e3/Screenshot%202026-05-22%20214054.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/4c81b0574205a66ed7c3572916f64b44564fd3e3/Screenshot%202026-05-21%20215447.png)
-
-
-## lec3 : Introduction to timing libs and steps to include new cell in synthesis
-
-Commands to copy necessary files to 'picorv32a' design 'src' directory
-
-```bash
-# Copy lef file
-cp sky130_vsdinv.lef ~/Desktop/OpenLane/designs/picorv32a/src/
-
-# List and check whether it's copied
-ls ~/Desktop/OpenLane/designs/picorv32a/src/
-
-# Copy lib files
-cp libs/sky130_fd_sc_hd__* ~/Desktop/OpenLane/designs/picorv32a/src/
-
-# List and check whether it's copied
-ls ~/Desktop/OpenLane/designs/picorv32a/src/
-```
-## lec4to6 : Introduction to delay tables
-- **Introduction to Delay Tables**
-    - **Definition of delay tables**: Lookup tables in `.lib` files that describe how gate delay changes.  
-	- **Two key parameters**:  
-            - Input transition time (slew).  
-  		    - Output load capacitance.  
-	- **2D table format**: Delay values stored for combinations of slew × load.  
-	- **Purpose**: Enables accurate timing analysis during synthesis, placement, and CTS.  
-	- **Takeaway**: Delay tables are the foundation of static timing analysis.
-
-- **Delay Table Usage (Part 1)**
-     - **Reading delay tables**: How to map input slew and output load to a delay value.  
-	 - **Interpolation**: Tools interpolate between table entries if exact values aren’t present.  
-	 - **Operating conditions**: Voltage, temperature, and process corner affect which table is used.  
-	 - **Practical example**: Shows how a buffer’s delay is calculated using table entries.  
-	 - **Takeaway**: Understanding how tools pick values helps debug timing reports.
-
- - **Delay Table Usage (Part 2)**
-     - **Applying delay tables in timing**: Demonstrates how STA tools use them in path analysis.  
-	 - **Setup and hold checks**: Relies on delay table values for accurate slack calculation.  
-	 - **Timing reports**: Delay tables explain why certain paths fail or pass.  
-	 - **Debugging violations**: Engineers use delay tables to trace back issues in CTS or routing.  
-	 - **Takeaway**: Mastery of delay tables is essential for fixing timing violations.
-
-
-## lec7 :  Lab steps to configure synthesis settings to fix slack and include vsdinv
-Commands to be added to config.tcl to include our custom cell(sky130_vsdinv) in the openlane flow
-
-```tcl
-set ::env(LIB_SYNTH) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
-set ::env(LIB_FASTEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__fast.lib"
-set ::env(LIB_SLOWEST) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__slow.lib"
-set ::env(LIB_TYPICAL) "$::env(OPENLANE_ROOT)/designs/picorv32a/src/sky130_fd_sc_hd__typical.lib"
-
-set ::env(EXTRA_LEFS) [glob $::env(OPENLANE_ROOT)/designs/$::env(DESIGN_NAME)/src/*.lef]
-```
-
-Edited config.tcl to include the added lef and change library to ones we added in src directory
-![image alt](https://github.com/Neha856/SoC_Design/blob/2d379650e66743d179e2d1d384a327a3561aba87/Screenshot%202026-05-21%20221347.png)
-
-Commands to invoke the OpenLANE flow include new lef and perform synthesis 
-
-```bash
-# Change directory to openlane flow directory
-cd Desktop/Openlane
-# open docker container
-make mount
-```
-```tcl
-# Now that we have entered the OpenLANE flow contained docker sub-system we can invoke the OpenLANE flow in the Interactive mode using the following command
-./flow.tcl -interactive
-
-# Now that OpenLANE flow is open we have to input the required packages for proper functionality of the OpenLANE flow
-package require openlane 1.0.2
-
-# Now the OpenLANE flow is ready to run any design and initially we have to prep the design creating some necessary files and directories for running a specific design which in our case is 'picorv32a
-prep -design picorv32a -tag [new run folder] -overwrite
-
-# Adiitional commands to include newly added lef to openlane flow
-set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
-add_lefs -src $lefs
-
-# Now that the design is prepped and ready, we can run synthesis using following command
-run_synthesis
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/a30b57188ded1e16565b869bc026f42e1a4128b9/Screenshot%202026-05-21%20222709.png)
-
-Commands to view and change parameters to improve timing and run synthesis
-
-```tcl
-# Now once again we have to prep design so as to update variables
-prep -design picorv32a -tag latestrunfolder -overwrite
-
-# Addiitional commands to include newly added lef to openlane flow merged.lef
-set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
-add_lefs -src $lefs
-
-# Command to display current value of variable SYNTH_STRATEGY
-echo $::env(SYNTH_STRATEGY)
-
-# Command to set new value for SYNTH_STRATEGY
-set ::env(SYNTH_STRATEGY) "DELAY 3"
-
-# Command to display current value of variable SYNTH_BUFFERING to check whether it's enabled
-echo $::env(SYNTH_BUFFERING)
-
-# Command to display current value of variable SYNTH_SIZING
-echo $::env(SYNTH_SIZING)
-
-# Command to set new value for SYNTH_SIZING
-set ::env(SYNTH_SIZING) 1
-
-# Command to display current value of variable SYNTH_DRIVING_CELL to check whether it's the proper cell or not
-echo $::env(SYNTH_DRIVING_CELL)
-
-# Now that the design is prepped and ready, we can run synthesis using following command
-run_synthesis
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/a30b57188ded1e16565b869bc026f42e1a4128b9/Screenshot%202026-05-21%20233607.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/a30b57188ded1e16565b869bc026f42e1a4128b9/chip_area.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/a30b57188ded1e16565b869bc026f42e1a4128b9/time_slack.png)
-
-Now that our custom inverter is properly accepted in synthesis we can now run floorplan using following command
-
-```tcl
-# Now we can run floorplan
-run_floorplan
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/a30b57188ded1e16565b869bc026f42e1a4128b9/Screenshot%202026-05-21%20235306.png)
-
-Now that floorplan is done we can do placement using following command
-
-```tcl
-# Now we are ready to run placement
-run_placement
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/a30b57188ded1e16565b869bc026f42e1a4128b9/Screenshot%202026-05-22%20001205.png)
-
-load placement def in magic in another terminal
-![image alt](https://github.com/Neha856/SoC_Design/blob/a5383364748c8dc796a964af42e0e33175b2ae45/Screenshot%202026-05-22%20001821.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/6c84fed9ba5591035cb008b4b49109f95be7bdc7/Screenshot%202026-05-23%20042329.png)
-Command for tkcon window to view internal layers of cells
-
-```tcl
-# Command to view internal connectivity layers
-expand
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/6c84fed9ba5591035cb008b4b49109f95be7bdc7/Screenshot%202026-05-23%20042353.png)
-
-
-# Section 2 - Timing analysis with ideal clocks using openSTA
-## Lec1&2 : Setup timing analysis and introduction to flip-flop setup time, Introduction to clock jitter and uncertainty
-
-System-on-chip (SoC) design has become a cornerstone of modern electronic systems. Ensuring the chip functions correctly at the intended speed is a crucial aspect of chip design. This is where static timing analysis (STA) comes into play. STA is a method used to determine if a design meets timing constraints, ensuring that signals are propagated and synchronized correctly throughout the entire chip. The word static in STA means that the timing analysis does not depend upon the data values being applied at the input pins.
-
-Static timing analysis aims to ensure that a given design, with the specified input clock definitions and the external environment parameters, can function at the intended speed without any timing issues. Unlike dynamic simulation, which tests specific input vectors and scenarios, STA analyzes the circuit by considering all possible paths and combinations of delays. The most important aspect of static timing analysis is that the entire design is analyzed once, and the required timing checks are performed for all possible paths and scenarios. Thus, STA is a complete and exhaustive method for verifying a design's timing.
-
-### Benefits of STA 
-
-Static timing analysis (STA) plays a crucial role in VLSI design, ensuring the timing correctness of a design. By analyzing the timing behavior under various conditions, STA helps engineers optimize their designs, achieve timing closure, and verify system functionality. It offers many benefits, such as:
-
-- **Timing Closure:** STA is crucial for achieving timing closure in designs. STA identifies critical paths and timing violations, helping designers refine circuits to meet timing constraints.
-
-- **Performance Optimization:** STA is crucial for optimizing the performance of VLSI designs. It identifies and analyzes the critical timing paths, allowing engineers to pinpoint and enhance areas that significantly impact the design's performance. The insights provided by STA enable informed decisions to boost the design's speed, power efficiency, and overall effectiveness.
-
-- **Verification and Validation:** STA is a crucial tool for validating VLSI designs. It simulates circuit behavior, considering process changes, environmental factors, and extreme conditions to detect timing errors. This process aids in uncovering design flaws, if any.
-
-- **Enhanced Design Quality and Reduced Cost:** STA integrates design rule checks (DRCs) to ensure designs meet specific manufacturing standards, improving yield, reducing costs, and enhancing quality. Early identification of issues through timing data leads to more reliable and robust designs.
-
-- **Large-Scale Design Signoff:** Distributed STA is a robust and mature methodology that enables the distribution of a single timing graphic across multiple machines, essential for signing off designs with over a billion instances. This innovative approach accelerates the STA process by enhancing compute resource efficiency and improving signoff accuracy.
-
-
-#### Input Files
-
-- `*.v`  : Gate-level Verilog Netlist  
-- `*.lib` : Liberty Timing Libraries  
-- `*.sdc` : Synopsys Design Constraints (clocks, delays, false paths)  
-- `*.sdf` : Annotated Delay File (optional)  
-- `*.spef`: Parasitics (RC extraction)  
-- `*.vcd` / `*.saif` : Switching Activity for Power Analysis 
-
-#### Clock Modeling Features
-
-- `Generated Clocks`: Derived from existing clocks  
-- `Latency`: Clock propagation delay  
-- `Source Latency`: Insertion delay from clock source to input  
-- `Uncertainty`: Jitter or skew margins  
-- `Propagated vs. Ideal`: Real vs. ideal clock network modeling  
-- `Gated Clock Checks`: Verifies clocks that are enabled conditionally  
-- `Multi-Frequency Clocks`: Analyzes multiple domains  
-
-#### Exception Paths
-
-Timing exceptions refine analysis for real behavior:
-
-- `set_false_path` — Ignores invalid functional paths  
-- `set_multicycle_path` — Allows multiple clock cycles  
-- `set_max_delay` / `set_min_delay` — Custom timing limits
-
-#### Timing Paths 
-
-`What do you mean by Timing Paths?`
-In digital circuit design, especially during timing analysis (Static Timing Analysis or STA), a timing path represents the route that a signal takes from one point in a circuit to another, typically from one flip-flop to another, from an input to an output, or from input to a flip-flop, etc. It shows how a signal propagates through combinational logic and sequential elements within a clock cycle.
-
-#### Timing Path Elements
-
-**Start Point**: Is the point where the signal originates or enters the digital circuit. This point is typically an input port of the design, where the signal is first introduced to the circuit. The start point of a timing path can be either:
-
-- An input port, where data enters the design, or
-- The flop clk pin, where data is launched on a clock edge.
-
-**End Point:** Is the point where the signal terminates or leaves the digital circuit. This point is typically an output port of the design, where the signal is outputted from the circuit. The end point of a timing path can be either:
-
-- A register's data input pin (D pin), where data is captured by the clock edge, or
-- An output port, where data must be available at a specific time.
-
-**Combinational Logic:** Combinational logic elements are the building blocks of a digital circuit and are used to perform logic operations on the signals passing through the circuit. These elements do not store any information, and the output of a combinational logic element is solely determined by the input values at that moment.
-
-**Types of timing paths**
-
-- **Register-to-Register Path**
-Flip-flop → Combinational logic → Flip-flop
-(Most common type in synchronous design)
-
-- **Input-to-Register Path**
-Input port → Combinational logic → Flip-flop
-
-- **Register-to-Output Path**
-Flip-flop → Combinational logic → Output port
-
-- **Input-to-Output Path**
-Input port → Combinational logic → Output port
-
-- **Clk gating** 
-Clock gating is a power-saving technique where the clock signal is disabled for certain parts of a circuit when not in use. It reduces dynamic power consumption by stopping unnecessary switching activity.
-
-- **Recovery and removal time**
-*Recovery time* is the minimum time the asynchronous control signal (like reset) must be de-asserted before the next active clock edge.
-*Removal time* is the minimum time the asynchronous signal must remain inactive after a clock edge to ensure correct operation.
-
-- **Data-to-data path**
-A data-to-data path measures the timing relationship between two independent data signals.
-It is often used to check timing between asynchronous interfaces or combinational logic outputs.
-
-- **Latch Timing(time borrow and time given)**
-**Time borrowing** allows a latch to use extra time from the next clock phase to meet setup timing.
-**Time given** means a latch provides unused time from its phase to the next stage, helping balance timing across pipeline stages.
-
-#### Setup and Hold Checks
-
--> **What is Setup Check?**
-* Is the minimum time that the data must be stable before the clock edge, and if this time is not met, it can lead to setup violations, resulting in incorrect data being stored in the sequential element. The setup check is essential to ensure correct timing behavior of a digital circuit and prevent data loss or other timing-related issues.
-* The setup time of a flip-flop depends on the technology node, operating conditions, and other factors. The value of the setup time is usually provided in the logic libraries.
-
--> **What is Hold Check?**
-* Is the minimum amount of time that the data must remain stable after the clock edge, and if this time is not met, it can lead to hold violations, resulting in incorrect data being stored in the sequential element. The hold check is necessary to prevent issues such as data corruption, metastability, and other timing-related problems in digital circuits.
-
-#### Slack Calculation 
-
-Setup and hold slack is defined as the difference between data required time and data arrivals time. 
-
->Setup slack = Data required time - Data arrival time
->Hold slack = Data arrival time - Data required time
-
--> **What is Data Arrival Time?**
-* The time taken by the signal to travel from the start point to the end point of the digital circuit. 
-
--> **What is Data Required Time?** 
-* The time for the clock to traverse through the clock path of the digital circuit. 
-
--> **What is Slack?** 
-* It is difference between the desired arrival times and the actual arrival time for a signal. 
-* Positive Slack indicates that the design is meeting the timing and still it can be improved. 
-* Zero slack means that the design is critically working at the desired frequency. 
-* Negative slack means, design has not achieved the specified timings at the specified frequency.
-* Slack has to be positive always and negative slack indicates a violation in timing.
-
-#### Different Types of Analysis in STA
-
-**1.SLEW/TRANSITION ANALYSIS:**
-Slew is the rate of change of a signal’s voltage — how quickly it rises or falls between logic levels.
-It affects timing accuracy, noise, and power consumption in digital circuits. and Transition analysis checks whether signal transitions (rise/fall times) stay within allowed limits. It ensures signals switch fast enough for reliable operation without delay or distortion. It has 2 categories:
-- **Data slew/transition** Data slew refers to the rise or fall time of data signals propagating through combinational paths. Poor data slew can increase delay and degrade timing at the receiving gate.
-- **Clock slew/clock transition** Clock slew measures how fast the clock edge changes from low to high or high to low. Accurate clock slew is critical to prevent setup/hold violations and maintain synchronization.
-
-**2.LOAD ANALYSIS:**
-Load analysis examines the total capacitive load driven by a cell’s output pin in a circuit.It helps determine how much delay and power the driving cell experiences due to connected gates or wires. Higher load increases signal delay and can degrade transition (slew) performance. Design tools use load analysis to optimize buffering and ensure timing and power meet specifications. Has 2 categories:
-- **Fanout Analysis(max and min):** Fanout refers to the number of gates or inputs driven by a single output.
-Higher fanout increases the load, leading to slower signal transitions and higher delay.
-- **Capacitances Analysis(max and min):** Capacitance is the total electrical load (from wires and input pins) that a driving gate must charge or discharge.It directly affects delay, power consumption, and signal integrity in a circuit.
-
-**3.CLOCK ANALYSIS:**
-Clock analysis evaluates the timing quality and integrity of the clock network in a digital circuit.
-It ensures the clock reaches all sequential elements reliably with correct timing for proper synchronization. having 2 types:
-- **Skew Analysis** Clock skew is the difference in arrival times of the same clock edge at different flip-flops.
-Excessive skew can cause setup or hold timing violations, affecting circuit performance.
-- **Pulse width Analysis** Pulse width analysis checks that the high and low durations of the clock signal meet minimum required limits. If the pulse width is too short due some parasitic set in the clk network, flip-flops or latches may fail to capture data correctly.
-
-#### *Positive edge triggered FF using Master slave configuration:*
-connect negative latch o/p to i/p of positive latch.
-![image alt](https://github.com/Neha856/SoC_Design/blob/4f331a1d5512f5fed6b92d58f4d143deb224fd84/Copilot_20260523_032001.png)
-
-#### *JITTER ANAYSIS:*
-Jitter analysis measures the timing variation of a clock signal’s edges from their ideal positions over time.
-It helps ensure the clock remains stable so data is launched and captured correctly across all flip-flops.
-    - Jitter is caused by noise, power supply fluctuations, or clock distribution imperfections.
-    - It is usually expressed in picoseconds (ps) as peak-to-peak or RMS jitter.
-
-#### **OCV (On-chip-variation):**
-On-Chip Variation refers to timing differences that occur within the same chip due to process, voltage, or temperature fluctuations. Even though two cells are on the same die, they may have slightly different delays because of manufacturing and environmental non-uniformities. like due to,
-
-**1.Etching process:** OCV from etching arises due to microloading and aspect ratio effects, causing gate length and CD variation.
-
-**2.Oxide thickness:** Oxide thickness variation shifts threshold voltage and drive current, impacting delay and leakage. Both processes introduce spatial and systematic mismatches across the die. These variations affect timing, power, and reliability in advanced nodes.
-
-#### **OCV Based setup timing Analysis**
-In OCV-based setup analysis, extra margins (derating factors) are applied to timing paths to account for these variations.
-
--Data path delays are increased (slowed down) — assuming worst-case slower transistors.
-
--Clock path delays are decreased (sped up) — assuming best-case faster transistors.
-
-This worst-case combination ensures that setup violations are caught even when parts of the chip behave differently. For example,
-If nominal delay = 100 ps,
-
--Data derate = +10% → 110 ps
-
--Clock derate = −10% → 90 ps
-The analysis ensures timing holds even if one region is slower and another is faster.It models early/late arrival times using statistical or bounded variation to catch worst-case delays. **Pessimism removal** identifies paths where both launch and capture flops share variation, reducing overestimated timing margins. This improves timing closure by eliminating unnecessary guardbands while preserving accuracy.
-
-
-
-## Lec3 :Lab steps to configure OpenSTA for post-synth timing analysis
-Similarly running OpenSTA and newly file created `pre_sta.conf` for STA analysis in `openlane` directory
-![image alt](https://github.com/Neha856/SoC_Design/blob/729c5debf340022ed71acea878798e41d7b67734/Screenshot%202026-05-23%20043049.png)
-Newly created `my_base.sdc` for STA analysis in `OpenLane/designs/picorv32a/src` directory based on the file `OpenLane/scripts/base.sdc`
-![image alt](https://github.com/Neha856/SoC_Design/blob/36990393ec17c58429f1d0e41e3474c3d76707f1/Screenshot%202026-05-23%20043320.png)
-
-
-Commands to run STA in another terminal
-
-```bash
-# Change directory to openlane
-cd Desktop/OpenLane
-# Command to invoke OpenSTA tool with script
-sta pre_sta.conf
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/0d0955ffa09a5f2dd400d85e01b0cee16400224d/Screenshot%202026-05-23%20043857.png)
-
-## Lec4 :Lab steps to optimize synthesis to reduce setup violations
-Since more fanout is causing more delay we can add parameter to reduce fanout and do synthesis again
-
-Commands to include new lef and perform synthesis 
-
-```tcl
-# Now the OpenLANE flow is ready to run any design and initially we have to prep the design creating some necessary files and directories for running a specific design which in our case is 'picorv32a'
-prep -design picorv32a -tag latestrunname -overwrite
-
-# Adiitional commands to include newly added lef to openlane flow
-set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
-add_lefs -src $lefs
-
-# Command to set new value for SYNTH_SIZING
-set ::env(SYNTH_SIZING) 1
-
-# Command to set new value for SYNTH_MAX_FANOUT
-set ::env(SYNTH_MAX_FANOUT) 4
-
-# Command to display current value of variable SYNTH_DRIVING_CELL to check whether it's the proper cell or not
-echo $::env(SYNTH_DRIVING_CELL)
-
-# Now that the design is prepped and ready, we can run synthesis using following command
-run_synthesis
-```
-
-Commands to run STA in another terminal
-
-```bash
-# Change directory to openlane
-cd Desktop/work/tools/openlane_working_dir/openlane
-
-# Command to invoke OpenSTA tool with script
-sta pre_sta.conf
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/a1effb8255f79597def93e084bdd90595661ee32/Screenshot%202026-05-23%20044708.png)
-
-## Lec5 : Lab steps to do basic timing ECO
-Command to run OpenROAD tool
-
-```tcl
-openroad
-
-# Reading lef file
- read_lef /OpenLane/designs/picorv32a/runs/24-03_10-03/tmp/merged.nom.lef
-# Reading def file
- read_def /OpenLane/designs/picorv32a/runs/24-03_10-03/results/cts/picorv32a.def
-# Creating an OpenROAD database to work with
- write_db pico_cts.db
-# Loading the created database in OpenROAD
- read_db pico_cts.db
-# Read netlist post CTS
- read_verilog /OpenLane/designs/picorv32a/runs/24-03_10-03/results/synthesis/picorv32a.v
-# Read library for design
- read_liberty $::env(LIB_SYNTH_COMPLETE)
-# Link design and library
- link_design picorv32a
-# Read in the custom sdc we created
- read_sdc /OpenLane/designs/picorv32a/src/my_base.sdc
-# Setting all cloks as propagated clocks
- set_propagated_clock [all_clocks]
-# Check syntax of 'report_checks' command
- help report_checks
-# Generating custom timing report
-report_checks -path_delay min_max -fields {slew trans net cap input_pins} -format full_clock_expanded -digits 4
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/b83894eac623a2ef72951e822549282bd6c83ca6/Screenshot%202026-05-23%20045722.png)
-
-</details>
-
-<details> 
-	<summary> DAY 5 -  Final steps for RTL2GDS using tritonRoute and openSTA </summary>
-
-# Section 1 - Routing and design rule check (DRC)
-## Lec1to3 : Introduction to Maze Routing – Lee’s algorithm,  Lee’s Algorithm conclusion and DRC
-**Maze Routing – Introduction:**
-
-- Maze routing is a **path‑finding algorithm** used to connect two points (source and target) in a chip layout.  
-- It works on a **grid representation** of the routing area.  
-- Each grid cell can be **free**, **occupied**, or **blocked** by obstacles.  
-- The goal is to find a **shortest valid path** that avoids obstacles and meets design rules.  
-- Used in **global and detailed routing** stages of VLSI design.
-
-
-**Lee’s Algorithm – Working Principle:**
-
-- Developed by **C.Y. Lee (1961)** — a **breadth‑first search (BFS)** based routing algorithm.  
-- Works in **two phases**:
-  1. **Expansion phase**:  
-     - Starts from the source node.  
-     - Propagates a wavefront through neighboring cells, marking each with incremental distance values.  
-     - Continues until the target node is reached.
-  2. **Backtracking phase**:  
-     - Traces back from the target to the source following decreasing distance values.  
-     - Produces the **shortest path**.
-- Guarantees an **optimal path** if one exists.  
-- Simple and robust, but computationally expensive for large grids.
-
-
-**Lee’s Algorithm – Conclusion:** Provides **complete and optimal routing** always finds a path if one exists. **Limitations**: High memory and time complexity and Not suitable for very large or dense designs. **Improvements**Algorithms like **Hadlock’s**, **A\***, and **Dijkstra’s** are faster alternatives.Still used as a **benchmark** for correctness in routing tools.
-
-**Design Rule Check (DRC)** DRC ensures the **layout obeys manufacturing constraints** defined by the foundry. Checks include **Minimum width** of metal lines, **Minimum spacing** between wires, **Via enclosure**, **overlap**, and **antenna rules**. Performed using tools like **Magic**, **Calibre**, or **KLayout**.  A layout passes DRC only when **no violations** are found — essential before tape‑out.
-
-
-# Section 2 - Power Distribution Network and routing
-## Lec1to7 :  Lab steps to build power distribution network, Lab steps from power straps to std cell power and Basics of global and detail routing and configure TritonRoute
-
-Commands to perform all necessary stages up until now
-
-```bash
-# Change directory to openlane flow directory
-cd Desktop/OpenLane
-make mount
-```
-```tcl
-# Now that we have entered the OpenLANE flow contained docker sub-system we can invoke the OpenLANE flow in the Interactive mode using the following command
-./flow.tcl -interactive
-# Now that OpenLANE flow is open we have to input the required packages for proper functionality of the OpenLANE flow
-package require openlane 0.9
-# Now the OpenLANE flow is ready to run any design and initially we have to prep the design creating some necessary files and directories for running a specific design which in our case is 'picorv32a'
-prep -design picorv32a
-# Addiitional commands to include newly added lef to openlane flow merged.lef
-set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
-add_lefs -src $lefs
-# Command to set new value for SYNTH_STRATEGY
-set ::env(SYNTH_STRATEGY) "DELAY 3"
-# Command to set new value for SYNTH_SIZING
-set ::env(SYNTH_SIZING) 1
-# Now that the design is prepped and ready, we can run synthesis using following command
-run_synthesis
-# Now we are ready to run placement
-run_placement
-# Incase getting error
-unset ::env(LIB_CTS)
-# With placement done we are now ready to run CTS
-run_cts
-# Now that CTS is done we can do power distribution network
-gen_pdn 
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/167c5d2eee4ee8dd7626c87a0c569a06e10f8634/Screenshot%202026-05-23%20051238.png)
-After loading PDN def in magic 
-![image alt](https://github.com/Neha856/SoC_Design/blob/167c5d2eee4ee8dd7626c87a0c569a06e10f8634/Screenshot%202026-05-23%20051337.png)
-![image alt](https://github.com/Neha856/SoC_Design/blob/167c5d2eee4ee8dd7626c87a0c569a06e10f8634/Screenshot%202026-05-23%20051406.png)
-
-
-
-# section3 - TritonRoute Features
-## L1to3 : Honors pre-processed route guides, Inter-guide connectivity and intra- & inter-layer routing and TritonRoute method to handle connectivity
-Command to perform routing
-
-```tcl
-# Check value of 'CURRENT_DEF'
-echo $::env(CURRENT_DEF)
-
-# Check value of 'ROUTING_STRATEGY'
-echo $::env(ROUTING_STRATEGY)
-
-# Command for detailed route using TritonRoute
-run_routing
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/527590344fa8f1395dd0e0377e975ee3da65f0e1/Screenshot%202026-05-23%20052859.png)
-
-
- ## L4 : Routing topology algorithm and final files list post-route
-
-Commands to be run in OpenLANE flow to do OpenROAD timing analysis with integrated OpenSTA in OpenROAD
-
-```tcl
-# Command to run OpenROAD tool
-openroad
-# Reading lef file
-read_lef /openLANE_flow/designs/picorv32a/runs/26-03_08-45/tmp/merged.lef
-# Reading def file
-read_def /openLANE_flow/designs/picorv32a/runs/26-03_08-45/results/routing/picorv32a.def
-# Creating an OpenROAD database to work with
-write_db pico_route.db
-# Loading the created database in OpenROAD
-read_db pico_route.db
-# Read netlist post CTS
-read_verilog /openLANE_flow/designs/picorv32a/runs/run name/results/synthesis/picorv32a.synthesis_preroute.v
-# Read library for design
-read_liberty $::env(LIB_SYNTH_COMPLETE)
-# Link design and library
-link_design picorv32a
-# Read in the custom sdc we created
-read_sdc /openLANE_flow/designs/picorv32a/src/my_base.sdc
-# Setting all cloks as propagated clocks
-set_propagated_clock [all_clocks]
-# Read SPEF
-read_spef /openLANE_flow/designs/picorv32a/runs/26-03_08-45/results/routing/picorv32a.spef
-# Generating custom timing report
-report_checks -path_delay min_max -fields {slew trans net cap input_pins} -format full_clock_expanded -digits 4
-# Exit to OpenLANE flow
-exit
-```
-![image alt](https://github.com/Neha856/SoC_Design/blob/f42c3f31e1843533b6d88c4f627158ae9f61e894/Screenshot%202026-05-15%20090114.png)
-
-</details>
-
-<details> 
-	<summary> MY LEARNING </summary>
-
-Completing the [SoC Design and Planning Workshop by VSD and NASSCOM] helped me understand the complete ASIC physical design flow from RTL to GDSII. I learned how to work with the open-source EDA tool flow using [OpenLANE](https://github.com/vsdip/vsd-openlane) and the Google Sky130 PDK. The workshop improved my knowledge of floorplanning, placement, clock tree synthesis, routing, and physical verification. I gained hands-on experience in Linux commands, Verilog design integration, timing analysis, and DRC/LVS checks. I also understood the importance of standard cells, power planning, and optimization techniques in chip design. Through labs, I learned how to debug design issues and analyze reports generated during the ASIC flow. Overall, the workshop strengthened my understanding of VLSI backend design and gave me exposure to real-world SoC implementation methodologies.
 
 </details>
 
