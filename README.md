@@ -821,7 +821,7 @@ def read design_mux.def
 ```
 Now the DEF contains Placement + Routing so Magic displays both cells and interconnects.
 
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/7c90acfd0ceda0fb8fb3031749bfaa332e5b2af9/images/routing.jpg.jpeg)
 
 
 # Section 3 - Post routing verification to gds file generation 
