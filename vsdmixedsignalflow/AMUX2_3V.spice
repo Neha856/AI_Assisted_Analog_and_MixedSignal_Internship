@@ -1,0 +1,17 @@
+* NGSPICE file created from AMUX2_3V.ext - technology: sky130A
+
+.subckt AMUX2_3V select I0 out I1 VSS VDD VDD_uq0
+M1000 out a_90_123# I1 SUB nshort w=0.8 l=0.2
++  ad=0.616 pd=3.14 as=0.512 ps=2.88
+M1001 out select I1 w_0_291# pshort w=0.82 l=0.2
++  ad=0.6314 pd=3.18 as=0.5248 ps=2.92
+M1002 a_90_123# select VSS SUB nshort w=0.8 l=0.2
++  ad=0.616 pd=3.14 as=0.512 ps=2.88
+M1003 a_90_123# select VDD w_0_291# pshort w=0.82 l=0.2
++  ad=0.6314 pd=3.18 as=0.5248 ps=2.92
+M1004 I0 select out SUB nshort w=0.8 l=0.2
++  ad=0.624 pd=3.16 as=0.504 ps=2.86
+M1005 I0 a_90_123# out w_0_291# pshort w=0.82 l=0.2
++  ad=0.6396 pd=3.2 as=0.5166 ps=2.9
+.ends
+
