@@ -973,29 +973,20 @@ This completes the end-to-end picture: We first create and verify an analog hard
 <details> 
 	<summary> Tools & Environment </summary>
 	
-	
-| Tool                           | Purpose                                                                                                                                              
-| ------------------------------ | --------------------------------------------------------------------------------|
 
-| **Magic VLSI**                 | Used for custom analog layout design, DRC verification, parasitic extraction                                         (`.ext`), SPICE netlist generation, LEF generation, and GDSII creation.| 
-
-| **NGSpice**                    | Used to perform pre-layout and post-layout transient simulations and compare                                         circuit performance before and after layout parasitics.|  
-
-| **OpenLane**                   | Complete open-source RTL-to-GDSII flow used for synthesis, floorplanning,
-                                   placement, PDN generation, routing, DRC, and final layout generation.|
-								   
-| **OpenROAD**                   | Physical design engine within OpenLane responsible for floorplanning, placement,                                     clock optimization, routing, and timing-driven optimization.| 
-
-| **Yosys**                      | RTL synthesis tool that converts Verilog RTL into a gate-level netlist using the                                     Sky130 standard cell library.| 
-
-| **Magic Extractor**            | Extracts the SPICE netlist from the physical layout for post-layout simulation                                       and verification.|  
-
-| **KLayout**                    | Used to visualize and inspect the final GDSII layout before fabrication.|                                                                             
-| **Sky130 PDK**                 | Open-source 130 nm Process Design Kit providing technology files, design rules,                                      standard cells, device models, LEF/Liberty files, and layout layers.| 
-| **Docker**                     | Provides a reproducible environment for running the OpenLane/OpenROAD flow                                           without dependency conflicts.|                                             
-| **Git & GitHub**               | Used for version control, project documentation, and collaboration.|                                                                                  
-| **Perl (`verilog_to_lib.pl`)** | Converts the Verilog description of the analog macro into a Liberty (`.lib`) file
-                                   for synthesis and timing integration.|
+| Tool | Purpose |
+|------|---------|
+| **Magic VLSI** | Used for custom analog layout design, DRC verification, parasitic extraction (`.ext`), SPICE netlist generation, LEF generation, and GDSII creation. |
+| **NGSpice** | Used to perform pre-layout and post-layout transient simulations and compare circuit performance before and after layout parasitics. |
+| **OpenLane** | Complete open-source RTL-to-GDSII flow used for synthesis, floorplanning, placement, PDN generation, routing, DRC, and final layout generation. |
+| **OpenROAD** | Physical design engine within OpenLane responsible for floorplanning, placement, routing, and physical design optimization. |
+| **Yosys** | RTL synthesis tool that converts Verilog RTL into a gate-level netlist using the Sky130 standard cell library. |
+| **Magic Extractor** | Extracts the SPICE netlist from the physical layout for post-layout simulation and verification. |
+| **KLayout** | Used to visualize and inspect the final GDSII layout before fabrication. |
+| **Sky130 PDK** | Open-source 130 nm Process Design Kit providing technology files, design rules, standard cells, device models, LEF/Liberty files, and layout layers. |
+| **Docker** | Provides a reproducible environment for running the OpenLane/OpenROAD flow without dependency conflicts. |
+| **Git & GitHub** | Used for version control, project documentation, and collaboration. |
+| **Perl (`verilog_to_lib.pl`)** | Converts the Verilog description of the analog macro into a Liberty (`.lib`) file for synthesis and timing integration. |
 							   
 
 </details>
