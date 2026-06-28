@@ -971,6 +971,11 @@ This completes the end-to-end picture: We first create and verify an analog hard
 </details>
 
 <details> 
+	<summary> WEEK4 : Demonstrating project in Video </summary>
+
+</details>
+
+<details> 
 	<summary> Tools & Environment </summary>
 	
 
@@ -988,6 +993,24 @@ This completes the end-to-end picture: We first create and verify an analog hard
 | **Git & GitHub** | Used for version control, project documentation, and collaboration. |
 | **Perl (`verilog_to_lib.pl`)** | Converts the Verilog description of the analog macro into a Liberty (`.lib`) file for synthesis and timing integration. |
 							   
+
+</details>
+
+
+<details> 
+	<summary> AI Tool Used </summary>
+
+Artificial Intelligence tools, primarily **ChatGPT (GPT-5.5)** and **Codex**, were used as learning and productivity assistants throughout this project. They helped in understanding the OpenLane/OpenROAD flow, debugging Linux and Magic commands, explaining synthesis, floorplanning, routing, DRC, LEF/LIB generation, post-layout simulation, and improving project documentation. AI also assisted in interpreting error messages, organizing the workflow, and preparing the GitHub documentation.
+
+## Best Practices While Using AI
+
+* **Do not rely on AI blindly.** Always verify commands, outputs, and explanations using official documentation, tool manuals, and practical experimentation.
+* **Understand the underlying theory.** Use AI as a learning companion, but reinforce concepts through tutorials, textbooks, and hands-on practice before applying them.
+* **Write clear and specific prompts.** Well-structured prompts significantly improve the quality of responses, reduce ambiguity, and minimize errors, leading to faster problem solving.
+* **Validate every result.** Simulation results, layouts, DRC reports, extracted netlists, and generated files should always be verified manually before drawing conclusions.
+
+> **Note:** AI is an effective assistant for accelerating learning and development, but it should complement—not replace—engineering judgment, theoretical understanding, and experimental validation.
+
 
 </details>
 
