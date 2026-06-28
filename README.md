@@ -835,7 +835,7 @@ Magic checks Minimum spacing Minimum width, Metal overlap, Via spacing, Enclosur
 ```bash
 magic -T ../sky130A.tech lef read results/merged.lef def read results/DRC/design_mux.drc.mag
 ```
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/main/images/design_drc_mag.png)
 
 **Why did DRC=10242 appear?**
 
@@ -844,7 +844,7 @@ The DRC=10242 indication was not due to actual layout violations. It occurred be
  ```bash
 magic -T ../sky130A.tech results/DRC/design_mux.drc.mag
 ```
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/main/images/design_drc_mag.png)
 
 
 ### Final Layout
@@ -856,7 +856,7 @@ The final layout output is in the form of `design_mux.mag` and `design_mux.gds`.
 ```javascript 
 magic -T ../sky130A.tech results/Layout/design_mux.mag
 ```
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/main/images/design_mux_layout.png)
 
 #### What is GDS|| file
 
@@ -968,7 +968,8 @@ This completes the end-to-end picture: We first create and verify an analog hard
 
 <details> 
 	<summary> Tools & Environment </summary>
-```text
+	
+```picture
 	
 | Tool                           | Purpose                                                                                                                                              
 | ------------------------------ | --------------------------------------------------------------------------------
@@ -995,6 +996,7 @@ This completes the end-to-end picture: We first create and verify an analog hard
 ```								   
 
 </details>
+
 
 <details> 
 	<summary> Acknowledgements </summary>
