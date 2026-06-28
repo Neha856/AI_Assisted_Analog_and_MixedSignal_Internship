@@ -45,6 +45,9 @@ OpenROAD is an open-source Electronic Design Automation (EDA) tool that automate
 
 Detailed installation steps can be found [here](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/ea7c85247df4d6d6fd80db4feb298a1a0e381494/docs/Steps%20to%20install%20OpenROAD%20tools-1.pdf).
 
+Opened 6_final.gds to verify that OpenROAD and KLayout were installed correctly, The GDS viewer was working, The technology/layer mapping was correct. This was only a sample/demo GDS file provided with the OpenROAD/OpenLane examples.
+
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/main/images/6_final_gds.png)
 
 ### Clonning the repository as AI suggested 
 
@@ -125,8 +128,8 @@ IEEE 1-page two column report can be found [here](https://github.com/Neha856/AI_
 
 
 
-# Section 3 - Get familiar to open-source EDA tools
-## Learning 1 : OpenLANE Directory structure 
+# Section 2 - Get familiar to open-source EDA tools
+## Learning  : OpenLANE Directory structure 
 ### OpenLane Directory Structure
 
 OpenLane has folders for:
@@ -244,7 +247,7 @@ M6 N001 select vee vee n_mos
 -  The 5 Voltage source is used which can be shown in below Figure. Example V6 SINE(0 1 25000000) which means the V6 is a sinewave with Offset = 0, VAmplitude = 1 V and Frequency = 25 MHz.
 
 ![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/1e01c10aec823279a80650179a09cd86623e9469/images/2to1_mux.drawio(1).png)
-             *Fig - Schematic design based on `NETLIST/21muxprelayout.cir` description.
+             **Fig - Schematic design based on `NETLIST/21muxprelayout.cir` description.**
 
 #### Pre-Layout Simulation
 
@@ -426,7 +429,7 @@ The lef file ![found here]() is matched with verilog wrapper ![found here]. But 
 ##### Resolving pin issue for the labels on metal layers:
 - Select the area under which the label is present. 
 
-<img align="center" width="500"  src="/images/vdd_select.png">
+![image alt](https://github.com/praharshapm/vsdmixedsignalflow/blob/master/images/vdd_select.png)
 
 - In the tkcon window type 
   ```tcl 
@@ -436,7 +439,7 @@ The lef file ![found here]() is matched with verilog wrapper ![found here]. But 
     ```javascript 
     port name
     ```
- <img align="center" width="500"  src="/images/port.png">   
+![image alt](https://github.com/praharshapm/vsdmixedsignalflow/blob/master/images/port.png)  
 
 - Similarly, carry out the same process for other labels.
   
@@ -825,7 +828,7 @@ Now the DEF contains Placement + Routing so Magic displays both cells and interc
 
 
 # Section 3 - Post routing verification to gds file generation 
-## Learning 1 : Post routing verification and final Layout generation 
+## Learning  : Post routing verification and final Layout generation 
 ### Post-layout DRC Cleaning
 
 ```tcl
@@ -869,7 +872,8 @@ File → Open → design_mux.gds
 # To correctly display Sky130 layers
 Tools → Manage Technologies → sky130
 ```
-![image alt]()
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/main/images/design_mux_gds.png)
+![image alt](https://github.com/Neha856/AI_Assisted_Analog_and_MixedSignal_Internship/blob/main/images/design_mux_gds_zoom.png)
 
 
 ##### Important Notes Why remove VDD/VSS from the Verilog?
@@ -969,31 +973,30 @@ This completes the end-to-end picture: We first create and verify an analog hard
 <details> 
 	<summary> Tools & Environment </summary>
 	
-```picture
 	
 | Tool                           | Purpose                                                                                                                                              
-| ------------------------------ | --------------------------------------------------------------------------------
+| ------------------------------ | --------------------------------------------------------------------------------|
 
-| **Magic VLSI**                 | Used for custom analog layout design, DRC verification, parasitic extraction                                         (`.ext`), SPICE netlist generation, LEF generation, and GDSII creation. 
+| **Magic VLSI**                 | Used for custom analog layout design, DRC verification, parasitic extraction                                         (`.ext`), SPICE netlist generation, LEF generation, and GDSII creation.| 
 
-| **NGSpice**                    | Used to perform pre-layout and post-layout transient simulations and compare                                         circuit performance before and after layout parasitics.  
+| **NGSpice**                    | Used to perform pre-layout and post-layout transient simulations and compare                                         circuit performance before and after layout parasitics.|  
 
 | **OpenLane**                   | Complete open-source RTL-to-GDSII flow used for synthesis, floorplanning,
-                                   placement, PDN generation, routing, DRC, and final layout generation. 
+                                   placement, PDN generation, routing, DRC, and final layout generation.|
 								   
-| **OpenROAD**                   | Physical design engine within OpenLane responsible for floorplanning, placement,                                     clock optimization, routing, and timing-driven optimization. 
+| **OpenROAD**                   | Physical design engine within OpenLane responsible for floorplanning, placement,                                     clock optimization, routing, and timing-driven optimization.| 
 
-| **Yosys**                      | RTL synthesis tool that converts Verilog RTL into a gate-level netlist using the                                     Sky130 standard cell library. 
+| **Yosys**                      | RTL synthesis tool that converts Verilog RTL into a gate-level netlist using the                                     Sky130 standard cell library.| 
 
-| **Magic Extractor**            | Extracts the SPICE netlist from the physical layout for post-layout simulation                                       and verification.  
+| **Magic Extractor**            | Extracts the SPICE netlist from the physical layout for post-layout simulation                                       and verification.|  
 
-| **KLayout**                    | Used to visualize and inspect the final GDSII layout before fabrication.                                                                             
-| **Sky130 PDK**                 | Open-source 130 nm Process Design Kit providing technology files, design rules,                                      standard cells, device models, LEF/Liberty files, and layout layers. 
-| **Docker**                     | Provides a reproducible environment for running the OpenLane/OpenROAD flow                                           without dependency conflicts.                                             
-| **Git & GitHub**               | Used for version control, project documentation, and collaboration.                                                                                  
+| **KLayout**                    | Used to visualize and inspect the final GDSII layout before fabrication.|                                                                             
+| **Sky130 PDK**                 | Open-source 130 nm Process Design Kit providing technology files, design rules,                                      standard cells, device models, LEF/Liberty files, and layout layers.| 
+| **Docker**                     | Provides a reproducible environment for running the OpenLane/OpenROAD flow                                           without dependency conflicts.|                                             
+| **Git & GitHub**               | Used for version control, project documentation, and collaboration.|                                                                                  
 | **Perl (`verilog_to_lib.pl`)** | Converts the Verilog description of the analog macro into a Liberty (`.lib`) file
-                                   for synthesis and timing integration.
-```								   
+                                   for synthesis and timing integration.|
+							   
 
 </details>
 
